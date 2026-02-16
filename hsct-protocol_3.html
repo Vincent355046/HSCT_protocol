@@ -593,9 +593,10 @@
                     
                     if (formData.gvhdType === 'tacrolimus') {
                         // 計算 Tacrolimus 劑量
+                        // 5 mg Tacrolimus in NS 500 mL → 濃度 = 0.01 mg/mL
                         const dosePerDay = (0.03 * adjustedBW).toFixed(3); // mg/day
                         const volumePerDay = (parseFloat(dosePerDay) / 0.01).toFixed(1); // mL/day
-                        const ratePerHour = (parseFloat(volumePerDay) / 24).toFixed(1); // mL/hr
+                        const ratePerHour = Math.round(parseFloat(volumePerDay) / 24); // mL/hr (四捨五入)
                         
                         otherMedicationsParagraphs.push(
                             new Paragraph({
@@ -604,7 +605,7 @@
                             }),
                             new Paragraph({
                                 children: [new TextRun({ 
-                                    text: `- Tacrolimus ${dosePerDay} mg (${volumePerDay} mL) in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from Day -1 (${dMinus1Date})`, 
+                                    text: `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from Day -1 (${dMinus1Date})`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
