@@ -325,6 +325,26 @@
                 <input type="text" id="admissionWard" name="admissionWard" value="6EW" placeholder="病房">
             </div>
 
+            <!-- GVHD prophylaxis 選項 -->
+            <div class="section-title">GVHD Prophylaxis</div>
+
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="gvhdProphylaxis" name="gvhdProphylaxis">
+                    <span>GVHD Prophylaxis from Day -1</span>
+                </label>
+                <div class="dosage-options" id="gvhdOptions">
+                    <label>
+                        <input type="radio" name="gvhdType" value="tacrolimus" checked>
+                        Tacrolimus
+                    </label>
+                    <label>
+                        <input type="radio" name="gvhdType" value="cyclosporine">
+                        Cyclosporine (CSA)
+                    </label>
+                </div>
+            </div>
+
             <!-- 其他藥物選項 -->
             <div class="section-title">其他藥物 (Other medications)</div>
 
@@ -374,6 +394,16 @@
                 dosageOptions.classList.add('active');
             } else {
                 dosageOptions.classList.remove('active');
+            }
+        });
+
+        // 控制 GVHD prophylaxis 選項的顯示
+        document.getElementById('gvhdProphylaxis').addEventListener('change', function() {
+            const gvhdOptions = document.getElementById('gvhdOptions');
+            if (this.checked) {
+                gvhdOptions.classList.add('active');
+            } else {
+                gvhdOptions.classList.remove('active');
             }
         });
 
@@ -484,7 +514,9 @@
                     otherOrder: document.getElementById('otherOrder').value,
                     letermovir: document.getElementById('letermovir').checked,
                     letermovirDose: document.querySelector('input[name="letermovirDose"]:checked')?.value || '1',
-                    vemlidy: document.getElementById('vemlidy').checked
+                    vemlidy: document.getElementById('vemlidy').checked,
+                    gvhdProphylaxis: document.getElementById('gvhdProphylaxis').checked,
+                    gvhdType: document.querySelector('input[name="gvhdType"]:checked')?.value || 'tacrolimus'
                 };
 
                 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, 
@@ -553,6 +585,51 @@
 
                 // 添加 Other medications 標題和藥物
                 const otherMedicationsParagraphs = [];
+                
+                // GVHD prophylaxis
+                if (formData.gvhdProphylaxis) {
+                    const adjustedBW = parseFloat(formData.adjustedBW);
+                    const dMinus1Date = formatDateRange(formData.d0, -1);
+                    
+                    if (formData.gvhdType === 'tacrolimus') {
+                        // 計算 Tacrolimus 劑量
+                        const dosePerDay = (0.03 * adjustedBW).toFixed(3); // mg/day
+                        const volumePerDay = (parseFloat(dosePerDay) / 0.01).toFixed(1); // mL/day
+                        const ratePerHour = (parseFloat(volumePerDay) / 24).toFixed(1); // mL/hr
+                        
+                        otherMedicationsParagraphs.push(
+                            new Paragraph({
+                                children: [new TextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
+                                spacing: { before: 200, after: 100 }
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({ 
+                                    text: `- Tacrolimus ${dosePerDay} mg (${volumePerDay} mL) in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from Day -1 (${dMinus1Date})`, 
+                                    size: 24 
+                                })],
+                                spacing: { after: 100 }
+                            })
+                        );
+                    } else if (formData.gvhdType === 'cyclosporine') {
+                        // 計算 Cyclosporine 劑量 (Adjusted BW × 1.5，四捨五入到最接近的 25 的倍數)
+                        const rawDose = adjustedBW * 1.5;
+                        const roundedDose = Math.round(rawDose / 25) * 25;
+                        
+                        otherMedicationsParagraphs.push(
+                            new Paragraph({
+                                children: [new TextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
+                                spacing: { before: 200, after: 100 }
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({ 
+                                    text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) ${roundedDose} mg in normal saline 250ml IF 3 hours Q12H from D-1 (${dMinus1Date})`, 
+                                    size: 24 
+                                })],
+                                spacing: { after: 100 }
+                            })
+                        );
+                    }
+                }
                 
                 if (formData.letermovir || formData.vemlidy) {
                     otherMedicationsParagraphs.push(
