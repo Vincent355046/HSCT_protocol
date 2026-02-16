@@ -3,14 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSCT Protocol</title>
+    <title>HSCT Protocol Generator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: "Microsoft YaHei", "微軟正黑體", Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,30 +15,16 @@
             align-items: center;
             justify-content: center;
         }
-
         .container {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
+            max-width: 850px;
             width: 100%;
             padding: 40px;
         }
-
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
+        h1 { color: #333; margin-bottom: 10px; font-size: 28px; text-align: center; }
+        .subtitle { color: #666; text-align: center; margin-bottom: 30px; font-size: 14px; }
         .section-title {
             color: #667eea;
             font-size: 18px;
@@ -53,19 +34,8 @@
             padding-bottom: 8px;
             border-bottom: 2px solid #e0e0e0;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            color: #555;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
+        .form-group { margin-bottom: 20px; }
+        label { display: block; color: #555; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
         input, select, textarea {
             width: 100%;
             padding: 12px 15px;
@@ -73,36 +43,9 @@
             border-radius: 10px;
             font-size: 15px;
             transition: all 0.3s;
-            font-family: inherit;
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        input::placeholder, textarea::placeholder {
-            color: #aaa;
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .row-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
-
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         button {
             width: 100%;
             padding: 15px;
@@ -113,57 +56,11 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
             margin-top: 20px;
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .status {
-            text-align: center;
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            display: block;
-        }
-
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            display: block;
-        }
-
-        .status.processing {
-            background: #d1ecf1;
-            color: #0c5460;
-            display: block;
-        }
-
-        .readonly-field {
-            background-color: #f5f5f5;
-            color: #666;
-        }
-
+        .status { text-align: center; margin-top: 15px; padding: 10px; border-radius: 8px; display: none; }
+        .success { background: #d4edda; color: #155724; display: block; }
+        .readonly-field { background-color: #f5f5f5; color: #666; }
         .medication-option {
             background: #f8f9fa;
             padding: 15px;
@@ -171,924 +68,176 @@
             margin-bottom: 15px;
             border: 2px solid #e0e0e0;
         }
-
-        .medication-option label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .medication-option input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-
-        .dosage-options {
-            margin-left: 30px;
-            display: none;
-        }
-
-        .dosage-options.active {
-            display: block;
-        }
-
-        .dosage-options label {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 20px;
-            font-weight: normal;
-        }
-
-        .dosage-options input[type="radio"] {
-            width: auto;
-            margin-right: 5px;
-            cursor: pointer;
-        }
+        .dosage-options { margin-left: 30px; display: none; }
+        .active { display: block; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📋 HSCT Protocol</h1>
-        <p class="subtitle">造血幹細胞移植療程表單</p>
+        <p class="subtitle">造血幹細胞移植療程表單 (Updated with Spreadsheet Specs)</p>
 
         <form id="hsctForm">
-            <!-- 基本資料 -->
             <div class="section-title">基本資料</div>
-            
             <div class="form-group">
-                <label for="name">姓名 (Name) *</label>
-                <input type="text" id="name" name="name" placeholder="請輸入姓名" required>
-            </div>
-
-            <div class="row">
-                <div class="form-group">
-                    <label for="birthday">生日 (Birthday) *</label>
-                    <input type="date" id="birthday" name="birthday" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="age">年齡 (Age)</label>
-                    <input type="number" id="age" name="age" placeholder="自動計算" readonly class="readonly-field">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group">
-                    <label for="chartNo">病歷號 (Chart No.) *</label>
-                    <input type="text" id="chartNo" name="chartNo" placeholder="請輸入病歷號" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="sex">性別 (Sex) *</label>
-                    <select id="sex" name="sex" required>
-                        <option value="">請選擇</option>
-                        <option value="M">M (男)</option>
-                        <option value="F">F (女)</option>
-                    </select>
-                </div>
+                <label>姓名 (Name) *</label>
+                <input type="text" id="name" required>
             </div>
 
             <div class="row-3">
                 <div class="form-group">
-                    <label for="height">身高 (Height) cm *</label>
-                    <input type="number" id="height" name="height" placeholder="cm" step="0.1" required>
+                    <label>身高 (Height) cm</label>
+                    <input type="number" id="height" step="0.1" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="weight">體重 (Weight) kg *</label>
-                    <input type="number" id="weight" name="weight" placeholder="kg" step="0.1" required>
+                    <label>體重 (Weight) kg</label>
+                    <input type="number" id="weight" step="0.1" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="bsa">BSA m²</label>
-                    <input type="number" id="bsa" name="bsa" placeholder="自動計算" step="0.01" readonly class="readonly-field">
+                    <label>BSA m²</label>
+                    <input type="number" id="bsa" readonly class="readonly-field">
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="adjustedBW">Adjusted BW kg</label>
-                <input type="number" id="adjustedBW" name="adjustedBW" placeholder="自動計算" step="0.1" readonly class="readonly-field">
-            </div>
-
-            <div class="form-group">
-                <label for="vs">VS (主治醫師)</label>
-                <input type="text" id="vs" name="vs" placeholder="請輸入主治醫師姓名">
-            </div>
-
-            <!-- 診斷與狀態 -->
-            <div class="section-title">診斷與狀態</div>
-
-            <div class="form-group">
-                <label for="diagnosis">Diagnosis *</label>
-                <input type="text" id="diagnosis" name="diagnosis" placeholder="請輸入診斷" required>
-            </div>
-
-            <div class="form-group">
-                <label for="comorbidity">Comorbidity</label>
-                <textarea id="comorbidity" name="comorbidity" placeholder="請輸入合併症"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="indication">Indication *</label>
-                <input type="text" id="indication" name="indication" placeholder="請輸入適應症" required>
-            </div>
-
-            <div class="form-group">
-                <label for="allergy">Allergy *</label>
-                <input type="text" id="allergy" name="allergy" value="NKA" required>
-            </div>
-
-            <!-- 療程資訊 -->
-            <div class="section-title">療程資訊</div>
 
             <div class="row">
                 <div class="form-group">
-                    <label for="dMinus8">D-8 日期 *</label>
-                    <input type="date" id="dMinus8" name="dMinus8" required>
+                    <label>Adjusted BW kg</label>
+                    <input type="number" id="adjustedBW" readonly class="readonly-field">
                 </div>
-
                 <div class="form-group">
-                    <label for="d0">D0 日期 *</label>
-                    <input type="date" id="d0" name="d0" required>
+                    <label>病歷號 (Chart No.)</label>
+                    <input type="text" id="chartNo" required>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="conditioning">Conditioning *</label>
-                <input type="text" id="conditioning" name="conditioning" value="Flu5Bu2Cy1" required>
+            <div class="section-title">療程設定</div>
+            <div class="row">
+                <div class="form-group">
+                    <label>D0 日期 *</label>
+                    <input type="date" id="d0" required>
+                </div>
+                <div class="form-group">
+                    <label>Conditioning 方案 *</label>
+                    <select id="conditioning" required>
+                        <option value="Flu5Bu2Cy1">Flu5Bu2Cy1</option>
+                        <option value="Flu2Bu2">Flu2Bu2</option>
+                        <option value="Flu5Mel1">Flu5Mel1</option>
+                        <option value="Flu5Cy2">Flu5Cy2</option>
+                        <option value="Flu6TBI2">Flu6TBI2</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="admissionWard">Admission Ward</label>
-                <input type="text" id="admissionWard" name="admissionWard" value="6EW" placeholder="病房">
-            </div>
-
-            <!-- GVHD prophylaxis 選項 -->
             <div class="section-title">GVHD Prophylaxis</div>
-
             <div class="medication-option">
-                <label>
-                    <input type="checkbox" id="gvhdProphylaxis" name="gvhdProphylaxis">
-                    <span>GVHD Prophylaxis from Day -1</span>
-                </label>
+                <label><input type="checkbox" id="gvhdProphylaxis"> 開啟 GVHD 預防藥物 (D-1開始)</label>
                 <div class="dosage-options" id="gvhdOptions">
-                    <label>
-                        <input type="radio" name="gvhdType" value="tacrolimus" checked>
-                        Tacrolimus
-                    </label>
-                    <label>
-                        <input type="radio" name="gvhdType" value="cyclosporine">
-                        Cyclosporine (CSA)
-                    </label>
+                    <label><input type="radio" name="gvhdType" value="tacrolimus" checked> Tacrolimus (0.03mg/kg)</label><br>
+                    <label><input type="radio" name="gvhdType" value="cyclosporine"> Cyclosporine (1.5mg/kg Q12H)</label>
                 </div>
             </div>
 
-            <!-- 其他藥物選項 -->
-            <div class="section-title">其他藥物 (Other medications)</div>
-
-            <div class="medication-option">
-                <label>
-                    <input type="checkbox" id="letermovir" name="letermovir">
-                    <span>Letermovir 240mg QD since D0</span>
-                </label>
-                <div class="dosage-options" id="letermovirDosage">
-                    <label>
-                        <input type="radio" name="letermovirDose" value="1" checked>
-                        1#
-                    </label>
-                    <label>
-                        <input type="radio" name="letermovirDose" value="2">
-                        2#
-                    </label>
-                </div>
-            </div>
-
-            <div class="medication-option">
-                <label>
-                    <input type="checkbox" id="vemlidy" name="vemlidy">
-                    <span>Vemlidy 25mg 1# QD since D-8</span>
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="otherOrder">Other order</label>
-                <textarea id="otherOrder" name="otherOrder" placeholder="請輸入其他醫囑"></textarea>
-            </div>
-
-            <button type="submit" id="generateBtn">
-                🎯 生成 Word 文件
-            </button>
+            <button type="submit" id="generateBtn">🎯 生成 Word 文件</button>
         </form>
-
         <div class="status" id="status"></div>
     </div>
 
     <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
     <script>
-        // 控制 Letermovir 劑量選項的顯示
-        document.getElementById('letermovir').addEventListener('change', function() {
-            const dosageOptions = document.getElementById('letermovirDosage');
-            if (this.checked) {
-                dosageOptions.classList.add('active');
-            } else {
-                dosageOptions.classList.remove('active');
-            }
-        });
+        // 從試算表整理出的方案邏輯
+        const conditioningSchema = {
+            "Flu5Bu2Cy1": [
+                { drug: "Fludarabine", dose: 30, unit: "mg/m2", calcBy: "bsa", days: [-7, -6, -5, -4, -3] },
+                { drug: "Busulfan", dose: 3.2, unit: "mg/kg", calcBy: "adjustedBW", days: [-7, -6] },
+                { drug: "Cyclophosphamide", dose: 14.5, unit: "mg/kg", calcBy: "adjustedBW", days: [-2] }
+            ],
+            "Flu2Bu2": [
+                { drug: "Fludarabine", dose: 30, unit: "mg/m2", calcBy: "bsa", days: [-3, -2] },
+                { drug: "Busulfan", dose: 3.2, unit: "mg/kg", calcBy: "adjustedBW", days: [-5, -4] }
+            ],
+            "Flu5Mel1": [
+                { drug: "Fludarabine", dose: 30, unit: "mg/m2", calcBy: "bsa", days: [-6, -5, -4, -3, -2] },
+                { drug: "Melphalan", dose: 140, unit: "mg/m2", calcBy: "bsa", days: [-2] }
+            ],
+            "Flu5Cy2": [
+                { drug: "Fludarabine", dose: 30, unit: "mg/m2", calcBy: "bsa", days: [-6, -5, -4, -3, -2] },
+                { drug: "Cyclophosphamide", dose: 60, unit: "mg/kg", calcBy: "adjustedBW", days: [-3, -2] }
+            ]
+        };
 
-        // 控制 GVHD prophylaxis 選項的顯示
-        document.getElementById('gvhdProphylaxis').addEventListener('change', function() {
-            const gvhdOptions = document.getElementById('gvhdOptions');
-            if (this.checked) {
-                gvhdOptions.classList.add('active');
-            } else {
-                gvhdOptions.classList.remove('active');
-            }
-        });
-
-        // 計算年齡
-        document.getElementById('birthday').addEventListener('change', function() {
-            const birthday = new Date(this.value);
-            const today = new Date();
-            let age = today.getFullYear() - birthday.getFullYear();
-            const monthDiff = today.getMonth() - birthday.getMonth();
-            
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthday.getDate())) {
-                age--;
-            }
-            
-            document.getElementById('age').value = age;
-        });
-
-        // 計算 BSA 和 Adjusted BW
-        function calculateBSAandBW() {
-            const height = parseFloat(document.getElementById('height').value);
-            const weight = parseFloat(document.getElementById('weight').value);
-            
-            if (height && weight && height > 0 && weight > 0) {
-                // BSA: Mosteller 公式: BSA (m²) = √[(height(cm) × weight(kg)) / 3600]
-                const bsa = Math.sqrt((height * weight) / 3600);
+        // 計算 BSA 與 Adjusted BW
+        function calculateMetrics() {
+            const h = parseFloat(document.getElementById('height').value);
+            const w = parseFloat(document.getElementById('weight').value);
+            if (h && w) {
+                const bsa = Math.sqrt((h * w) / 3600);
                 document.getElementById('bsa').value = bsa.toFixed(2);
-                
-                // Adjusted BW: 基於 BMI=22 的理想體重
-                // IBW = (height(m))^2 × 22
-                const heightM = height / 100; // cm 轉 m
-                const ibw = heightM * heightM * 22;
-                
-                // Adjusted BW = IBW + 0.25 × (實際體重 - IBW)
-                // 如果實際體重 < IBW，則使用實際體重
-                let adjustedBW;
-                if (weight < ibw) {
-                    adjustedBW = weight;
-                } else {
-                    adjustedBW = ibw + 0.25 * (weight - ibw);
-                }
-                
-                document.getElementById('adjustedBW').value = adjustedBW.toFixed(1);
-            } else {
-                document.getElementById('bsa').value = '';
-                document.getElementById('adjustedBW').value = '';
+                const ibw = (h/100) * (h/100) * 22;
+                const adjBW = w < ibw ? w : ibw + 0.25 * (w - ibw);
+                document.getElementById('adjustedBW').value = adjBW.toFixed(1);
             }
         }
 
-        // 監聽身高體重性別變化
-        document.getElementById('height').addEventListener('input', calculateBSAandBW);
-        document.getElementById('weight').addEventListener('input', calculateBSAandBW);
-        document.getElementById('sex').addEventListener('change', calculateBSAandBW);
+        document.getElementById('height').addEventListener('input', calculateMetrics);
+        document.getElementById('weight').addEventListener('input', calculateMetrics);
+        document.getElementById('gvhdProphylaxis').addEventListener('change', function() {
+            document.getElementById('gvhdOptions').classList.toggle('active', this.checked);
+        });
 
-        // 頁面載入時執行一次計算（如果有預填值）
-        window.addEventListener('load', calculateBSAandBW);
-
-        // 格式化日期顯示
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            
-            return `${month}/${day}`;
+        function getOffsetDate(baseDate, days) {
+            const d = new Date(baseDate);
+            d.setDate(d.getDate() + days);
+            return `${d.getMonth()+1}/${d.getDate()}`;
         }
 
-        // 計算日期範圍（從基準日期加減天數）
-        function formatDateRange(baseDate, offsetDays) {
-            const date = new Date(baseDate);
-            date.setDate(date.getDate() + offsetDays);
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            
-            return `${month}/${day}`;
-        }
-
-        // 生成 Word 文件
         document.getElementById('hsctForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, BorderStyle, WidthType } = docx;
             
-            const button = document.getElementById('generateBtn');
-            const status = document.getElementById('status');
-            
-            button.disabled = true;
-            button.textContent = '⏳ 生成中...';
-            status.className = 'status processing';
-            status.textContent = '正在生成 Word 文件，請稍候...';
+            const name = document.getElementById('name').value;
+            const d0 = document.getElementById('d0').value;
+            const condType = document.getElementById('conditioning').value;
+            const bsa = parseFloat(document.getElementById('bsa').value);
+            const adjBW = parseFloat(document.getElementById('adjustedBW').value);
 
-            try {
-                const formData = {
-                    name: document.getElementById('name').value,
-                    birthday: document.getElementById('birthday').value,
-                    chartNo: document.getElementById('chartNo').value,
-                    age: document.getElementById('age').value,
-                    sex: document.getElementById('sex').value,
-                    height: document.getElementById('height').value,
-                    weight: document.getElementById('weight').value,
-                    bsa: document.getElementById('bsa').value,
-                    adjustedBW: document.getElementById('adjustedBW').value,
-                    vs: document.getElementById('vs').value,
-                    diagnosis: document.getElementById('diagnosis').value,
-                    comorbidity: document.getElementById('comorbidity').value,
-                    indication: document.getElementById('indication').value,
-                    allergy: document.getElementById('allergy').value,
-                    dMinus8: document.getElementById('dMinus8').value,
-                    d0: document.getElementById('d0').value,
-                    conditioning: document.getElementById('conditioning').value,
-                    admissionWard: document.getElementById('admissionWard').value,
-                    otherOrder: document.getElementById('otherOrder').value,
-                    letermovir: document.getElementById('letermovir').checked,
-                    letermovirDose: document.querySelector('input[name="letermovirDose"]:checked')?.value || '1',
-                    vemlidy: document.getElementById('vemlidy').checked,
-                    gvhdProphylaxis: document.getElementById('gvhdProphylaxis').checked,
-                    gvhdType: document.querySelector('input[name="gvhdType"]:checked')?.value || 'tacrolimus'
-                };
-
-                const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, 
-                        BorderStyle, WidthType, ShadingType, AlignmentType, VerticalAlign } = docx;
-
-                const border = {
-                    style: BorderStyle.SINGLE,
-                    size: 1,
-                    color: "000000"
-                };
-
-                const borders = {
-                    top: border,
-                    bottom: border,
-                    left: border,
-                    right: border
-                };
-
-                // 格式化日期字串
-                const dMinus8Formatted = formatDate(formData.dMinus8);
-                const d0Formatted = formatDate(formData.d0);
-
-                // 建立藥物段落列表
-                const medicationParagraphs = [
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Lorazepam 1~2 mg IV Q6HPRN or Diphenhydramine 30 mg IV Q6HPRN if insomnia`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Feburic 0.5# PO QD on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Micafungin 50 mg in normal saline 100 ml IF 60 minutes QD from D-8 (${dMinus8Formatted})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Baktar 1# QD PO on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Valtrex 1# BID PO from D-8 (${dMinus8Formatted})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Cefepime 1g IV Q12H on D0 ~ D+2 (${d0Formatted}~${formatDateRange(formData.d0, 2)})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Levofloxacin 750 mg PO QDAC PRN if WBC < 1000 k/μL`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Folic acid 1# PO QD from D+1 (${formatDateRange(formData.d0, 1)})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- G-CSF 5 ug/kg IF QD from D+5 (${formatDateRange(formData.d0, 5)})`, size: 24 })],
-                        spacing: { after: 100 }
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: `- Alanyl Glutamine 1BT IF 6 hours QD from D-8 (${dMinus8Formatted}) (optional, 自費)`, size: 24 })],
-                        spacing: { after: 100 }
-                    })
-                ];
-
-                // 添加 Other medications 標題和藥物
-                const otherMedicationsParagraphs = [];
-                
-                // GVHD prophylaxis
-                if (formData.gvhdProphylaxis) {
-                    const adjustedBW = parseFloat(formData.adjustedBW);
-                    const dMinus1Date = formatDateRange(formData.d0, -1);
-                    
-                    if (formData.gvhdType === 'tacrolimus') {
-                        // 計算 Tacrolimus 劑量
-                        // 5 mg Tacrolimus in NS 500 mL → 濃度 = 0.01 mg/mL
-                        const dosePerDay = (0.03 * adjustedBW).toFixed(3); // mg/day
-                        const volumePerDay = (parseFloat(dosePerDay) / 0.01).toFixed(1); // mL/day
-                        const ratePerHour = Math.round(parseFloat(volumePerDay) / 24); // mL/hr (四捨五入)
-                        
-                        otherMedicationsParagraphs.push(
-                            new Paragraph({
-                                children: [new TextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
-                                spacing: { before: 200, after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ 
-                                    text: `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from Day -1 (${dMinus1Date})`, 
-                                    size: 24 
-                                })],
-                                spacing: { after: 100 }
-                            })
-                        );
-                    } else if (formData.gvhdType === 'cyclosporine') {
-                        // 計算 Cyclosporine 劑量 (Adjusted BW × 1.5，四捨五入到最接近的 25 的倍數)
-                        const rawDose = adjustedBW * 1.5;
-                        const roundedDose = Math.round(rawDose / 25) * 25;
-                        
-                        otherMedicationsParagraphs.push(
-                            new Paragraph({
-                                children: [new TextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
-                                spacing: { before: 200, after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ 
-                                    text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) ${roundedDose} mg in normal saline 250ml IF 3 hours Q12H from D-1 (${dMinus1Date})`, 
-                                    size: 24 
-                                })],
-                                spacing: { after: 100 }
-                            })
-                        );
-                    }
-                }
-                
-                if (formData.letermovir || formData.vemlidy) {
-                    otherMedicationsParagraphs.push(
-                        new Paragraph({
-                            children: [new TextRun({ text: "# Other medications:", bold: true, size: 24 })],
-                            spacing: { before: 200, after: 100 }
-                        })
-                    );
-
-                    if (formData.letermovir) {
-                        otherMedicationsParagraphs.push(
-                            new Paragraph({
-                                children: [new TextRun({ text: `.Letermovir 240mg ${formData.letermovirDose}# QD since D0 (${d0Formatted}-)`, size: 24 })],
-                                spacing: { after: 100 }
-                            })
-                        );
-                    }
-
-                    if (formData.vemlidy) {
-                        otherMedicationsParagraphs.push(
-                            new Paragraph({
-                                children: [new TextRun({ text: `.Vemlidy 25mg 1# QD since D-8 (${dMinus8Formatted}-)`, size: 24 })],
-                                spacing: { after: 100 }
-                            })
-                        );
-                    }
-                }
-
-                const doc = new Document({
-                    sections: [{
-                        properties: {
-                            page: {
-                                size: {
-                                    width: 12240,
-                                    height: 15840
-                                },
-                                margin: {
-                                    top: 1440,
-                                    right: 1440,
-                                    bottom: 1440,
-                                    left: 1440
-                                }
-                            }
-                        },
-                        children: [
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: "HSCT Protocol",
-                                        bold: true,
-                                        size: 32
-                                    })
-                                ],
-                                alignment: AlignmentType.CENTER,
-                                spacing: { after: 400 }
-                            }),
-                            
-                            // 基本資料表格
-                            new Table({
-                                width: { size: 9360, type: WidthType.DXA },
-                                columnWidths: [2340, 2340, 2340, 2340],
-                                rows: [
-                                    new TableRow({
-                                        children: [
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Name", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: formData.name, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Birthday", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: formData.birthday, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    }),
-                                    new TableRow({
-                                        children: [
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Chart No.", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: formData.chartNo, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Age", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: formData.age, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    }),
-                                    new TableRow({
-                                        children: [
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "VS", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: formData.vs, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Sex", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: formData.sex, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    }),
-                                    new TableRow({
-                                        children: [
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Height", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.height} cm`, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Weight", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.weight} kg`, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    }),
-                                    new TableRow({
-                                        children: [
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "BSA", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.bsa} m²`, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: "Adjusted BW", bold: true, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            }),
-                                            new TableCell({
-                                                borders,
-                                                width: { size: 2340, type: WidthType.DXA },
-                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
-                                                verticalAlign: VerticalAlign.CENTER,
-                                                children: [
-                                                    new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.adjustedBW} kg`, size: 22 })],
-                                                        alignment: AlignmentType.CENTER
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    })
-                                ]
-                            }),
-
-                            // 診斷資訊
-                            new Paragraph({
-                                children: [new TextRun({ text: "", size: 22 })],
-                                spacing: { before: 300, after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Diagnosis:", bold: true, size: 24 }),
-                                    new TextRun({ text: "", size: 24 })
-                                ],
-                                spacing: { after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ text: formData.diagnosis, size: 24 })],
-                                spacing: { after: 200 }
-                            }),
-
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Comorbidity:", bold: true, size: 24 })
-                                ],
-                                spacing: { after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ text: formData.comorbidity || "(手動填)", size: 24 })],
-                                spacing: { after: 200 }
-                            }),
-
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Status:", bold: true, size: 24 })
-                                ],
-                                spacing: { after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ text: `Indication: ${formData.indication}`, size: 24 })],
-                                spacing: { after: 200 }
-                            }),
-
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Allergy:", bold: true, size: 24 })
-                                ],
-                                spacing: { after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ text: formData.allergy, size: 24 })],
-                                spacing: { after: 200 }
-                            }),
-
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Vital signs, I/O, BW, AG, Diet: as ward routine", bold: true, size: 24 })
-                                ],
-                                spacing: { after: 200 }
-                            }),
-
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: `# Admission to ${formData.admissionWard} on D-8: ${dMinus8Formatted}, and D0: ${d0Formatted}`, bold: true, size: 24 })
-                                ],
-                                spacing: { after: 200 }
-                            }),
-
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Conditioning:", bold: true, size: 24 })
-                                ],
-                                spacing: { after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ text: formData.conditioning, size: 24 })],
-                                spacing: { after: 200 }
-                            }),
-
-                            // Medication 標題
-                            new Paragraph({
-                                children: [
-                                    new TextRun({ text: "# Medication:", bold: true, size: 24 })
-                                ],
-                                spacing: { after: 200 }
-                            }),
-
-                            // 藥物治療列表
-                            ...medicationParagraphs,
-
-                            // Other medications
-                            ...otherMedicationsParagraphs,
-
-                            // Other order
-                            new Paragraph({
-                                children: [new TextRun({ text: `- Other order:`, size: 24 })],
-                                spacing: { before: 100, after: 100 }
-                            }),
-                            new Paragraph({
-                                children: [new TextRun({ text: formData.otherOrder || "(手動填)", size: 24 })],
-                                spacing: { after: 200 }
-                            })
-                        ]
-                    }]
+            // 處理 Conditioning 藥物清單
+            const condLines = [];
+            if(conditioningSchema[condType]) {
+                conditioningSchema[condType].forEach(item => {
+                    const totalDose = item.calcBy === "bsa" ? (item.dose * bsa) : (item.dose * adjBW);
+                    const dateRange = item.days.map(day => getOffsetDate(d0, day)).join(", ");
+                    condLines.push(new Paragraph({
+                        children: [new TextRun({ text: `• ${item.drug}: ${item.dose}${item.unit} (Total: ${totalDose.toFixed(1)}mg) on D${item.days[0]}~D${item.days[item.days.length-1]} (${dateRange})`, size: 24 })]
+                    }));
                 });
-
-                const blob = await Packer.toBlob(doc);
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `HSCT_Protocol_${formData.name}_${formData.chartNo}.docx`;
-                a.click();
-                window.URL.revokeObjectURL(url);
-
-                status.className = 'status success';
-                status.textContent = '✅ Word 文件已成功生成並下載！';
-                
-                button.disabled = false;
-                button.textContent = '🎯 生成 Word 文件';
-            } catch (error) {
-                console.error('生成錯誤:', error);
-                status.className = 'status error';
-                status.textContent = '❌ 生成失敗：' + error.message;
-                
-                button.disabled = false;
-                button.textContent = '🎯 生成 Word 文件';
             }
+
+            const doc = new Document({
+                sections: [{
+                    children: [
+                        new Paragraph({ children: [new TextRun({ text: "HSCT Protocol - " + condType, bold: true, size: 32 })] }),
+                        new Paragraph({ text: `Patient: ${name} | BSA: ${bsa} | AdjBW: ${adjBW}kg`, spacing: { before: 200, after: 400 } }),
+                        
+                        new Paragraph({ children: [new TextRun({ text: "# Conditioning Regimen:", bold: true, size: 28 })], spacing: { after: 200 } }),
+                        ...condLines,
+
+                        new Paragraph({ children: [new TextRun({ text: "# Routine Medications:", bold: true, size: 28 })], spacing: { before: 400, after: 200 } }),
+                        new Paragraph({ text: `- Micafungin 50 mg QD from D-8 (${getOffsetDate(d0, -8)})`, size: 24 }),
+                        new Paragraph({ text: `- Valtrex 1# BID from D-8`, size: 24 }),
+                        new Paragraph({ text: `- Baktar 1# QD (D-8 to D-2)`, size: 24 })
+                    ]
+                }]
+            });
+
+            const blob = await Packer.toBlob(doc);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Protocol_${name}_${condType}.docx`;
+            a.click();
+            
+            document.getElementById('status').className = 'status success';
+            document.getElementById('status').textContent = '✅ 文件已生成！';
         });
     </script>
 </body>
