@@ -960,7 +960,15 @@
                             }),
                             new Paragraph({
                                 children: [new TextRun({ text: formData.conditioning, size: 24 })],
-                                spacing: { after: 300 }
+                                spacing: { after: 200 }
+                            }),
+
+                            // Medication 標題
+                            new Paragraph({
+                                children: [
+                                    new TextRun({ text: "# Medication:", bold: true, size: 24 })
+                                ],
+                                spacing: { after: 200 }
                             }),
 
                             // 藥物治療列表
