@@ -267,9 +267,16 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="adjustedBW">Adjusted BW kg</label>
-                <input type="number" id="adjustedBW" name="adjustedBW" placeholder="自動計算" step="0.1" readonly class="readonly-field">
+            <div class="row">
+                <div class="form-group">
+                    <label for="adjustedBW">Adjusted BW kg</label>
+                    <input type="number" id="adjustedBW" name="adjustedBW" placeholder="自動計算" step="0.1" readonly class="readonly-field">
+                </div>
+
+                <div class="form-group">
+                    <label for="adjustedBSA">Adjusted BSA m²</label>
+                    <input type="number" id="adjustedBSA" name="adjustedBSA" placeholder="自動計算" step="0.01" readonly class="readonly-field">
+                </div>
             </div>
 
             <div class="form-group">
@@ -315,9 +322,68 @@
                 </div>
             </div>
 
+            <!-- Conditioning 與 GVHD prophylaxis -->
+            <div class="section-title">Conditioning and Acute GVHD Prophylaxis Order</div>
+
             <div class="form-group">
                 <label for="conditioning">Conditioning *</label>
                 <input type="text" id="conditioning" name="conditioning" value="Flu5Bu2Cy1" required>
+            </div>
+
+            <!-- TBI 選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="tbi" name="tbi">
+                    <span>TBI (Total body irradiation) 150 cGy BID</span>
+                </label>
+                <div class="dosage-options" id="tbiOptions">
+                    <label>
+                        <input type="radio" name="tbiType" value="mac" checked>
+                        MAC TBI
+                    </label>
+                    <label>
+                        <input type="radio" name="tbiType" value="single">
+                        Single day (D-1)
+                    </label>
+                    <div id="macTbiDates" style="margin-top: 10px; display: none;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
+                                <input type="number" id="tbiStartDay" name="tbiStartDay" value="-7" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
+                                <input type="number" id="tbiEndDay" name="tbiEndDay" value="-4" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fludarabine 選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="fludarabine" name="fludarabine">
+                    <span>Fludarabine (30mg/m²/day)</span>
+                </label>
+                <div class="dosage-options" id="fludarabineOptions">
+                    <div style="margin-top: 10px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
+                                <input type="number" id="fluStartDay" name="fluStartDay" value="-8" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
+                                <input type="number" id="fluEndDay" name="fluEndDay" value="-4" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -407,6 +473,44 @@
             }
         });
 
+        // 控制 TBI 選項的顯示
+        document.getElementById('tbi').addEventListener('change', function() {
+            const tbiOptions = document.getElementById('tbiOptions');
+            if (this.checked) {
+                tbiOptions.classList.add('active');
+                // 檢查是否選擇 MAC TBI
+                const tbiType = document.querySelector('input[name="tbiType"]:checked')?.value;
+                if (tbiType === 'mac') {
+                    document.getElementById('macTbiDates').style.display = 'block';
+                }
+            } else {
+                tbiOptions.classList.remove('active');
+                document.getElementById('macTbiDates').style.display = 'none';
+            }
+        });
+
+        // 監聽 TBI 類型變化
+        document.querySelectorAll('input[name="tbiType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const macTbiDates = document.getElementById('macTbiDates');
+                if (this.value === 'mac') {
+                    macTbiDates.style.display = 'block';
+                } else {
+                    macTbiDates.style.display = 'none';
+                }
+            });
+        });
+
+        // 控制 Fludarabine 選項的顯示
+        document.getElementById('fludarabine').addEventListener('change', function() {
+            const fludarabineOptions = document.getElementById('fludarabineOptions');
+            if (this.checked) {
+                fludarabineOptions.classList.add('active');
+            } else {
+                fludarabineOptions.classList.remove('active');
+            }
+        });
+
         // 計算年齡
         document.getElementById('birthday').addEventListener('change', function() {
             const birthday = new Date(this.value);
@@ -446,9 +550,14 @@
                 }
                 
                 document.getElementById('adjustedBW').value = adjustedBW.toFixed(1);
+                
+                // Adjusted BSA: 使用 Height 和 Adjusted BW 計算
+                const adjustedBSA = Math.sqrt((height * adjustedBW) / 3600);
+                document.getElementById('adjustedBSA').value = adjustedBSA.toFixed(2);
             } else {
                 document.getElementById('bsa').value = '';
                 document.getElementById('adjustedBW').value = '';
+                document.getElementById('adjustedBSA').value = '';
             }
         }
 
@@ -502,6 +611,7 @@
                     weight: document.getElementById('weight').value,
                     bsa: document.getElementById('bsa').value,
                     adjustedBW: document.getElementById('adjustedBW').value,
+                    adjustedBSA: document.getElementById('adjustedBSA').value,
                     vs: document.getElementById('vs').value,
                     diagnosis: document.getElementById('diagnosis').value,
                     comorbidity: document.getElementById('comorbidity').value,
@@ -510,6 +620,13 @@
                     dMinus8: document.getElementById('dMinus8').value,
                     d0: document.getElementById('d0').value,
                     conditioning: document.getElementById('conditioning').value,
+                    tbi: document.getElementById('tbi').checked,
+                    tbiType: document.querySelector('input[name="tbiType"]:checked')?.value || 'mac',
+                    tbiStartDay: parseInt(document.getElementById('tbiStartDay').value) || -7,
+                    tbiEndDay: parseInt(document.getElementById('tbiEndDay').value) || -4,
+                    fludarabine: document.getElementById('fludarabine').checked,
+                    fluStartDay: parseInt(document.getElementById('fluStartDay').value) || -8,
+                    fluEndDay: parseInt(document.getElementById('fluEndDay').value) || -4,
                     admissionWard: document.getElementById('admissionWard').value,
                     otherOrder: document.getElementById('otherOrder').value,
                     letermovir: document.getElementById('letermovir').checked,
@@ -962,6 +1079,36 @@
                                                 ]
                                             })
                                         ]
+                                    }),
+                                    new TableRow({
+                                        children: [
+                                            new TableCell({
+                                                borders,
+                                                width: { size: 2340, type: WidthType.DXA },
+                                                shading: { fill: "E7E6E6", type: ShadingType.CLEAR },
+                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
+                                                verticalAlign: VerticalAlign.CENTER,
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: "Adjusted BSA", bold: true, size: 22 })],
+                                                        alignment: AlignmentType.CENTER
+                                                    })
+                                                ]
+                                            }),
+                                            new TableCell({
+                                                borders,
+                                                width: { size: 7020, type: WidthType.DXA },
+                                                columnSpan: 3,
+                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
+                                                verticalAlign: VerticalAlign.CENTER,
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: `${formData.adjustedBSA} m²`, size: 22 })],
+                                                        alignment: AlignmentType.CENTER
+                                                    })
+                                                ]
+                                            })
+                                        ]
                                     })
                                 ]
                             }),
@@ -1040,6 +1187,109 @@
                                 children: [new TextRun({ text: formData.conditioning, size: 24 })],
                                 spacing: { after: 200 }
                             }),
+
+                            // TBI section
+                            ...(formData.tbi ? (() => {
+                                const tbiParagraphs = [];
+                                
+                                if (formData.tbiType === 'mac') {
+                                    // MAC TBI with custom days
+                                    const startDate = formatDateRange(formData.d0, formData.tbiStartDay);
+                                    const endDate = formatDateRange(formData.d0, formData.tbiEndDay);
+                                    
+                                    tbiParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# TBI (Total body irradiation), 150 cGy BID on D${formData.tbiStartDay} ~ D${formData.tbiEndDay} (${startDate}~${endDate})`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `- Solu-medrol 40 mg iv before TBI BID on D${formData.tbiStartDay} to D${formData.tbiEndDay} (${startDate}~${endDate})`, 
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                } else {
+                                    // D-1 only
+                                    const dMinus1Date = formatDateRange(formData.d0, -1);
+                                    
+                                    tbiParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# TBI (Total body irradiation), 150 cGy BID on D-1 (${dMinus1Date})`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `- Solu-medrol 40 mg iv before TBI BID on D-1 (${dMinus1Date})`, 
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                }
+                                
+                                return tbiParagraphs;
+                            })() : []),
+
+                            // Fludarabine section
+                            ...(formData.fludarabine ? (() => {
+                                const fluParagraphs = [];
+                                
+                                // 計算 Fludarabine 劑量
+                                const adjustedBSA = parseFloat(formData.adjustedBSA);
+                                const rawDose = adjustedBSA * 30;
+                                // MROUND(value, 5) - 四捨五入到最接近的 5 的倍數
+                                const roundedDose = Math.round(rawDose / 5) * 5;
+                                
+                                const fluStartDate = formatDateRange(formData.d0, formData.fluStartDay);
+                                const fluEndDate = formatDateRange(formData.d0, formData.fluEndDay);
+                                
+                                fluParagraphs.push(
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Fludarabine (30mg/m²/day) ${roundedDose} mg in normal saline 100 ml IF over 30 minutes on D${formData.fluStartDay} ~ D${formData.fluEndDay} (${fluStartDate}~${fluEndDate}) (自費)`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    })
+                                );
+                                
+                                return fluParagraphs;
+                            })() : []),
 
                             // Medication 標題
                             new Paragraph({
