@@ -541,6 +541,88 @@
                 </div>
             </div>
 
+            <!-- MTX 選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="mtx" name="mtx">
+                    <span>MTX (Methotrexate) (15 mg/m²/day)</span>
+                </label>
+                <div class="dosage-options" id="mtxOptions">
+                    <div style="margin-top: 10px;">
+                        <label style="font-size: 12px; font-weight: normal;">
+                            <input type="checkbox" id="mtxDelay" name="mtxDelay" style="width: auto; margin-right: 5px;">
+                            幹細胞輸注延至 D+1 (MTX 皆延後一天)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MMF 選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="mmf" name="mmf">
+                    <span>Mycophenolate (Myfortic)</span>
+                </label>
+                <div class="dosage-options" id="mmfOptions">
+                    <label>
+                        <input type="radio" name="mmfType" value="d0" checked>
+                        From D0 (180 mg/cap, 2# BIDAC)
+                    </label>
+                    <label>
+                        <input type="radio" name="mmfType" value="d5">
+                        From D+5 (10.8 mg/kg TID)
+                    </label>
+                </div>
+            </div>
+
+            <!-- PTCy RIC 選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="ptcy" name="ptcy">
+                    <span>PTCy RIC (14.5 mg/kg/day)</span>
+                </label>
+                <div class="dosage-options" id="ptcyOptions">
+                    <div style="margin-top: 10px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
+                                <input type="number" id="ptcyStartDay" name="ptcyStartDay" value="-8" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
+                                <input type="number" id="ptcyEndDay" name="ptcyEndDay" value="-7" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PTCy 50mg/kg 選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="ptcy50" name="ptcy50">
+                    <span>PTCy (50 mg/kg/day)</span>
+                </label>
+                <div class="dosage-options" id="ptcy50Options">
+                    <div style="margin-top: 10px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
+                                <input type="number" id="ptcy50StartDay" name="ptcy50StartDay" value="3" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
+                                <input type="number" id="ptcy50EndDay" name="ptcy50EndDay" value="4" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 其他藥物選項 -->
             <div class="section-title">其他藥物 (Other medications)</div>
 
@@ -668,6 +750,46 @@
                 atgOptions.classList.add('active');
             } else {
                 atgOptions.classList.remove('active');
+            }
+        });
+
+        // 控制 MTX 選項的顯示
+        document.getElementById('mtx').addEventListener('change', function() {
+            const mtxOptions = document.getElementById('mtxOptions');
+            if (this.checked) {
+                mtxOptions.classList.add('active');
+            } else {
+                mtxOptions.classList.remove('active');
+            }
+        });
+
+        // 控制 MMF 選項的顯示
+        document.getElementById('mmf').addEventListener('change', function() {
+            const mmfOptions = document.getElementById('mmfOptions');
+            if (this.checked) {
+                mmfOptions.classList.add('active');
+            } else {
+                mmfOptions.classList.remove('active');
+            }
+        });
+
+        // 控制 PTCy 選項的顯示
+        document.getElementById('ptcy').addEventListener('change', function() {
+            const ptcyOptions = document.getElementById('ptcyOptions');
+            if (this.checked) {
+                ptcyOptions.classList.add('active');
+            } else {
+                ptcyOptions.classList.remove('active');
+            }
+        });
+
+        // 控制 PTCy 50mg/kg 選項的顯示
+        document.getElementById('ptcy50').addEventListener('change', function() {
+            const ptcy50Options = document.getElementById('ptcy50Options');
+            if (this.checked) {
+                ptcy50Options.classList.add('active');
+            } else {
+                ptcy50Options.classList.remove('active');
             }
         });
 
@@ -1036,6 +1158,16 @@
                     atgTotalDose: parseFloat(document.getElementById('atgTotalDose').value) || 4.5,
                     atgStartDay: parseInt(document.getElementById('atgStartDay').value) || -2,
                     atgEndDay: parseInt(document.getElementById('atgEndDay').value) || -1,
+                    mtx: document.getElementById('mtx').checked,
+                    mtxDelay: document.getElementById('mtxDelay').checked,
+                    mmf: document.getElementById('mmf').checked,
+                    mmfType: document.querySelector('input[name="mmfType"]:checked')?.value || 'd0',
+                    ptcy: document.getElementById('ptcy').checked,
+                    ptcyStartDay: parseInt(document.getElementById('ptcyStartDay').value) || -8,
+                    ptcyEndDay: parseInt(document.getElementById('ptcyEndDay').value) || -7,
+                    ptcy50: document.getElementById('ptcy50').checked,
+                    ptcy50StartDay: parseInt(document.getElementById('ptcy50StartDay').value) || 3,
+                    ptcy50EndDay: parseInt(document.getElementById('ptcy50EndDay').value) || 4,
                     admissionWard: document.getElementById('admissionWard').value,
                     otherOrder: document.getElementById('otherOrder').value,
                     letermovir: document.getElementById('letermovir').checked,
@@ -2032,6 +2164,14 @@
                                     }),
                                     new Paragraph({
                                         children: [new TextRun({ 
+                                            text: `# Hydration with 2.5% G/S, daily volume as above table`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
                                             text: `# Check urine analysis on D${formData.cyStartDay} ~ D${formData.cyEndDay} (${cyStartDate}~${cyEndDate}) and D0 (${d0Date})`, 
                                             bold: true,
                                             size: 24 
@@ -2105,6 +2245,228 @@
                                 );
                                 
                                 return atgParagraphs;
+                            })() : []),
+
+                            // MTX section
+                            ...(formData.mtx ? (() => {
+                                const mtxParagraphs = [];
+                                
+                                // 計算 MTX 劑量
+                                const adjustedBSA = parseFloat(formData.adjustedBSA);
+                                const firstDose = Math.round(adjustedBSA * 15); // 15 mg/m² (不需四捨五入到特定倍數)
+                                const subsequentDose = Math.round(adjustedBSA * 10); // 10 mg/m²
+                                
+                                // 判斷是否延後
+                                const delay = formData.mtxDelay ? 1 : 0;
+                                const d1 = 1 + delay;
+                                const d3 = 3 + delay;
+                                const d6 = 6 + delay;
+                                const d11 = 11 + delay;
+                                
+                                const d1Date = formatDateRange(formData.d0, d1);
+                                const d3Date = formatDateRange(formData.d0, d3);
+                                const d6Date = formatDateRange(formData.d0, d6);
+                                const d11Date = formatDateRange(formData.d0, d11);
+                                
+                                mtxParagraphs.push(
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# MTX (15 mg/m²/day) ${firstDose} mg IV push on D${d1} (${d1Date}) (the first dose should be 24 hours apart from stem cell infusion)`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 100 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `then (10 mg/m²/day) ${subsequentDose} mg on D${d3} (${d3Date}), D${d6} (${d6Date}), D${d11} (${d11Date})`, 
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 100 }
+                                    })
+                                );
+                                
+                                if (formData.mtxDelay) {
+                                    mtxParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `(若幹細胞輸注延至 D+1，則 MTX 皆延後一天打)`, 
+                                                size: 24,
+                                                italics: true
+                                            })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                } else {
+                                    mtxParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ text: "", size: 24 })],
+                                            spacing: { after: 100 }
+                                        })
+                                    );
+                                }
+                                
+                                mtxParagraphs.push(
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Leucovorin 15mg IV Q6H x 4 doses for rescue, starting 12 hours after each MTX dose`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    })
+                                );
+                                
+                                return mtxParagraphs;
+                            })() : []),
+
+                            // MMF section
+                            ...(formData.mmf ? (() => {
+                                const mmfParagraphs = [];
+                                
+                                if (formData.mmfType === 'd0') {
+                                    // D0 開始的方案
+                                    const d0Date = formatDateRange(formData.d0, 0);
+                                    
+                                    mmfParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Mycophenolate (Myfortic) (180 mg/cap) 2# BIDAC PO from D0 (${d0Date}), begin 4-6 hours after stem cells infusion, and start to taper after D+30, consider DC on D+61`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                } else {
+                                    // D+5 開始的方案
+                                    const adjustedBW = parseFloat(formData.adjustedBW);
+                                    const totalDose = adjustedBW * 10.8; // mg per dose
+                                    const capsules = Math.round(totalDose / 180); // 180 mg/cap, 四捨五入到整數顆
+                                    
+                                    const d5Date = formatDateRange(formData.d0, 5);
+                                    
+                                    // 計算星期幾
+                                    const d5DateObj = new Date(formData.d0);
+                                    d5DateObj.setDate(d5DateObj.getDate() + 5);
+                                    const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+                                    const weekday = weekdays[d5DateObj.getDay()];
+                                    
+                                    mmfParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Myfortic (180mg/tab, 10.8mg/kg TID) ${capsules}# TID from D+5 (${d5Date}) (${weekday})`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 100 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `PTCy, Myfortic 要從 D+5 開始`, 
+                                                size: 24,
+                                                italics: true
+                                            })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                }
+                                
+                                return mmfParagraphs;
+                            })() : []),
+
+                            // PTCy RIC section
+                            ...(formData.ptcy ? (() => {
+                                const ptcyParagraphs = [];
+                                
+                                // 計算 PTCy 劑量
+                                const adjustedBW = parseFloat(formData.adjustedBW);
+                                const ptcyDose = Math.round(adjustedBW * 14.5); // 14.5 mg/kg，四捨五入到整數
+                                
+                                const ptcyStartDate = formatDateRange(formData.d0, formData.ptcyStartDay);
+                                const ptcyEndDate = formatDateRange(formData.d0, formData.ptcyEndDay);
+                                
+                                ptcyParagraphs.push(
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Endoxan (14.5mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 1 hours QD on D${formData.ptcyStartDay} ~ D${formData.ptcyEndDay} (${ptcyStartDate}~${ptcyEndDate})`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    })
+                                );
+                                
+                                return ptcyParagraphs;
+                            })() : []),
+
+                            // PTCy 50mg/kg section
+                            ...(formData.ptcy50 ? (() => {
+                                const ptcy50Paragraphs = [];
+                                
+                                // 計算 PTCy 50 劑量
+                                const adjustedBW = parseFloat(formData.adjustedBW);
+                                const ptcy50Dose = Math.round(adjustedBW * 50); // 50 mg/kg，四捨五入到整數
+                                
+                                // 計算 Mesna 劑量 (25 mg/kg)
+                                const mesnaDose = Math.round(adjustedBW * 25);
+                                
+                                const ptcy50StartDate = formatDateRange(formData.d0, formData.ptcy50StartDay);
+                                const ptcy50EndDate = formatDateRange(formData.d0, formData.ptcy50EndDay);
+                                const d0Date = formatDateRange(formData.d0, 0);
+                                
+                                ptcy50Paragraphs.push(
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Endoxan (50mg/kg/day) ${ptcy50Dose} mg in normal saline 100cc IF 2.5 hours QD on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcy50StartDate}~${ptcy50EndDate}) (start 24 hours after last Busulfan dosing)`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# Check urine analysis on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcy50StartDate}~${ptcy50EndDate}) and D0 (${d0Date})`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    }),
+                                    new Paragraph({
+                                        children: [new TextRun({ 
+                                            text: `# No immunosuppressive agents were administered until 24 hours after the last dose of post-transplantation Cy, including corticosteroids.`, 
+                                            bold: true,
+                                            size: 24 
+                                        })],
+                                        spacing: { after: 200 }
+                                    })
+                                );
+                                
+                                return ptcy50Paragraphs;
                             })() : []),
 
                             // Medication 標題
