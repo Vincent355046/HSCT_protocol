@@ -322,6 +322,59 @@
                 </div>
             </div>
 
+            <!-- 療程時間表預覽 -->
+            <div id="schedulePreview" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; display: none;">
+                <h3 style="color: #667eea; font-size: 16px; margin-bottom: 15px;">療程時間表預覽</h3>
+                <div id="scheduleTable" style="overflow-x: auto;"></div>
+                
+                <!-- Basic IVF 輸入欄位 -->
+                <div style="margin-top: 20px;">
+                    <h4 style="color: #667eea; font-size: 14px; margin-bottom: 10px;">Basic IVF (mL)</h4>
+                    <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px;">
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-8</label>
+                            <input type="number" id="ivf_-8" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-7</label>
+                            <input type="number" id="ivf_-7" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-6</label>
+                            <input type="number" id="ivf_-6" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-5</label>
+                            <input type="number" id="ivf_-5" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-4</label>
+                            <input type="number" id="ivf_-4" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-3</label>
+                            <input type="number" id="ivf_-3" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-2</label>
+                            <input type="number" id="ivf_-2" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-1</label>
+                            <input type="number" id="ivf_-1" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D0</label>
+                            <input type="number" id="ivf_0" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D+1</label>
+                            <input type="number" id="ivf_1" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Conditioning 與 GVHD prophylaxis -->
             <div class="section-title">Conditioning and Acute GVHD Prophylaxis Order</div>
 
@@ -672,9 +725,248 @@
         document.getElementById('height').addEventListener('input', calculateBSAandBW);
         document.getElementById('weight').addEventListener('input', calculateBSAandBW);
         document.getElementById('sex').addEventListener('change', calculateBSAandBW);
+        
+        // 監聽 Adjusted BW 變化以更新 IVF
+        document.getElementById('weight').addEventListener('input', function() {
+            calculateBSAandBW();
+            setTimeout(updateIVFDefaults, 100); // 延遲一點確保 Adjusted BW 已計算完成
+        });
+        document.getElementById('height').addEventListener('input', function() {
+            calculateBSAandBW();
+            setTimeout(updateIVFDefaults, 100);
+        });
+        
+        // 監聽 Cyclophosphamide 選項變化
+        document.getElementById('cyclophosphamide').addEventListener('change', updateIVFDefaults);
+        document.getElementById('cyStartDay').addEventListener('input', updateIVFDefaults);
+        document.getElementById('cyEndDay').addEventListener('input', updateIVFDefaults);
 
         // 頁面載入時執行一次計算（如果有預填值）
-        window.addEventListener('load', calculateBSAandBW);
+        window.addEventListener('load', function() {
+            calculateBSAandBW();
+            generateScheduleTable();
+        });
+
+        // 計算並更新 IVF 預設值
+        function updateIVFDefaults() {
+            const adjustedBW = parseFloat(document.getElementById('adjustedBW').value);
+            
+            if (!adjustedBW || adjustedBW <= 0) return;
+            
+            // 檢查是否有選擇 Cyclophosphamide
+            if (document.getElementById('cyclophosphamide').checked) {
+                const cyStartDay = parseInt(document.getElementById('cyStartDay').value) || -3;
+                const cyEndDay = parseInt(document.getElementById('cyEndDay').value) || -2;
+                
+                // 計算 Cy 使用天數的 IVF (Adjusted BW × 40, rounded to 500)
+                const cyDayIVF = Math.round((adjustedBW * 40) / 500) * 500;
+                
+                // 計算 Cy 隔天的 IVF (Adjusted BW × 30, rounded to 500)
+                const postCyDayIVF = Math.round((adjustedBW * 30) / 500) * 500;
+                
+                // 設定所有天數的預設值
+                for (let i = -8; i <= 1; i++) {
+                    const ivfInput = document.getElementById(`ivf_${i}`);
+                    if (ivfInput) {
+                        // Cy 使用當天
+                        if (i >= cyStartDay && i <= cyEndDay) {
+                            ivfInput.value = cyDayIVF;
+                        }
+                        // Cy 使用隔天（從 cyEndDay 的下一天開始計算需要幾天）
+                        else if (i > cyEndDay && i <= cyEndDay + (cyEndDay - cyStartDay + 1)) {
+                            ivfInput.value = postCyDayIVF;
+                        }
+                        // 其他天數
+                        else {
+                            ivfInput.value = 1000;
+                        }
+                    }
+                }
+            } else {
+                // 如果沒有選擇 Cy，所有天數都是 1000
+                for (let i = -8; i <= 1; i++) {
+                    const ivfInput = document.getElementById(`ivf_${i}`);
+                    if (ivfInput) {
+                        ivfInput.value = 1000;
+                    }
+                }
+            }
+            
+            // 更新表格
+            generateScheduleTable();
+        }
+
+        // 生成療程時間表
+        function generateScheduleTable() {
+            const d0Input = document.getElementById('d0').value;
+            const heightInput = document.getElementById('height').value;
+            const weightInput = document.getElementById('weight').value;
+            const adjustedBWInput = document.getElementById('adjustedBW').value;
+            const adjustedBSAInput = document.getElementById('adjustedBSA').value;
+            
+            // 檢查是否有必要的資料
+            if (!d0Input || !heightInput || !weightInput) {
+                document.getElementById('schedulePreview').style.display = 'none';
+                return;
+            }
+            
+            // 檢查是否有選擇任何 conditioning
+            const hasConditioning = document.getElementById('fludarabine').checked ||
+                                   document.getElementById('tbi').checked ||
+                                   document.getElementById('busulfan').checked ||
+                                   document.getElementById('cyclophosphamide').checked ||
+                                   document.getElementById('atg').checked ||
+                                   document.getElementById('gvhdProphylaxis').checked;
+            
+            if (!hasConditioning) {
+                document.getElementById('schedulePreview').style.display = 'none';
+                return;
+            }
+            
+            // 顯示預覽區域
+            document.getElementById('schedulePreview').style.display = 'block';
+            
+            const d0Date = new Date(d0Input);
+            
+            // 建立表格 HTML
+            let tableHTML = '<table style="border-collapse: collapse; width: 100%; font-size: 12px; background: white;">';
+            
+            // 標題行：BH, Actual BW, Adjusted BW, Adjusted BSA
+            tableHTML += '<tr style="background: #667eea; color: white;">';
+            tableHTML += `<td colspan="12" style="border: 1px solid #ddd; padding: 8px; text-align: left;">`;
+            tableHTML += `# BH: ${heightInput} cm, Actual BW: ${weightInput} kg, Adjusted BW: ${adjustedBWInput}kg, Adjusted BSA: ${adjustedBSAInput}m²`;
+            tableHTML += '</td></tr>';
+            
+            // Day 行
+            tableHTML += '<tr style="background: #e0e0e0; font-weight: bold;">';
+            tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">Day</td>';
+            for (let i = -8; i <= 1; i++) {
+                tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${i}</td>`;
+            }
+            tableHTML += '</tr>';
+            
+            // 星期行
+            tableHTML += '<tr style="background: #f0f0f0;">';
+            tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">星期幾</td>';
+            for (let i = -8; i <= 1; i++) {
+                const date = new Date(d0Date);
+                date.setDate(date.getDate() + i);
+                const weekdays = ['W7', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'];
+                tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${weekdays[date.getDay()]}</td>`;
+            }
+            tableHTML += '</tr>';
+            
+            // 日期行
+            tableHTML += '<tr style="background: #f8f8f8;">';
+            tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">Date</td>';
+            for (let i = -8; i <= 1; i++) {
+                const date = new Date(d0Date);
+                date.setDate(date.getDate() + i);
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${month}/${day}</td>`;
+            }
+            tableHTML += '</tr>';
+            
+            // 藥物行
+            const medications = [];
+            
+            // Fludarabine
+            if (document.getElementById('fludarabine').checked) {
+                const fluStart = parseInt(document.getElementById('fluStartDay').value) || -8;
+                const fluEnd = parseInt(document.getElementById('fluEndDay').value) || -4;
+                medications.push({ name: 'Fludarabine', start: fluStart, end: fluEnd });
+            }
+            
+            // Busulfan
+            if (document.getElementById('busulfan').checked) {
+                const buStart = parseInt(document.getElementById('buStartDay').value) || -7;
+                const buEnd = parseInt(document.getElementById('buEndDay').value) || -4;
+                medications.push({ name: 'Busulfan', start: buStart, end: buEnd });
+            }
+            
+            // Endoxan
+            if (document.getElementById('cyclophosphamide').checked) {
+                const cyStart = parseInt(document.getElementById('cyStartDay').value) || -3;
+                const cyEnd = parseInt(document.getElementById('cyEndDay').value) || -2;
+                medications.push({ name: 'Endoxan', start: cyStart, end: cyEnd });
+            }
+            
+            // ATG
+            if (document.getElementById('atg').checked) {
+                const atgStart = parseInt(document.getElementById('atgStartDay').value) || -2;
+                const atgEnd = parseInt(document.getElementById('atgEndDay').value) || -1;
+                medications.push({ name: 'ATG', start: atgStart, end: atgEnd });
+            }
+            
+            // CSA / Tacrolimus
+            if (document.getElementById('gvhdProphylaxis').checked) {
+                const gvhdType = document.querySelector('input[name="gvhdType"]:checked')?.value;
+                const gvhdName = gvhdType === 'cyclosporine' ? 'CsA' : 'Tacrolimus';
+                medications.push({ name: gvhdName, start: -1, end: 1 });
+            }
+            
+            // 繪製每個藥物的行
+            medications.forEach(med => {
+                tableHTML += '<tr>';
+                tableHTML += `<td style="border: 1px solid #ddd; padding: 8px;">${med.name}</td>`;
+                for (let i = -8; i <= 1; i++) {
+                    const isActive = i >= med.start && i <= med.end;
+                    const cellContent = isActive ? 'V' : '';
+                    const bgColor = isActive ? '#d4edda' : 'white';
+                    tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center; background: ${bgColor}; font-weight: bold;">${cellContent}</td>`;
+                }
+                tableHTML += '</tr>';
+            });
+            
+            // Basic IVF 行
+            tableHTML += '<tr>';
+            tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">Basic IVF</td>';
+            for (let i = -8; i <= 1; i++) {
+                const ivfInput = document.getElementById(`ivf_${i}`);
+                const amount = ivfInput ? ivfInput.value : '1000';
+                tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${amount}</td>`;
+            }
+            tableHTML += '</tr>';
+            
+            tableHTML += '</table>';
+            
+            document.getElementById('scheduleTable').innerHTML = tableHTML;
+        }
+        
+        // 監聽所有相關欄位變化以更新表格
+        document.getElementById('d0').addEventListener('change', generateScheduleTable);
+        document.getElementById('height').addEventListener('input', generateScheduleTable);
+        document.getElementById('weight').addEventListener('input', generateScheduleTable);
+        
+        document.getElementById('fludarabine').addEventListener('change', generateScheduleTable);
+        document.getElementById('fluStartDay').addEventListener('input', generateScheduleTable);
+        document.getElementById('fluEndDay').addEventListener('input', generateScheduleTable);
+        
+        document.getElementById('busulfan').addEventListener('change', generateScheduleTable);
+        document.getElementById('buStartDay').addEventListener('input', generateScheduleTable);
+        document.getElementById('buEndDay').addEventListener('input', generateScheduleTable);
+        
+        document.getElementById('cyclophosphamide').addEventListener('change', generateScheduleTable);
+        document.getElementById('cyStartDay').addEventListener('input', generateScheduleTable);
+        document.getElementById('cyEndDay').addEventListener('input', generateScheduleTable);
+        
+        document.getElementById('atg').addEventListener('change', generateScheduleTable);
+        document.getElementById('atgStartDay').addEventListener('input', generateScheduleTable);
+        document.getElementById('atgEndDay').addEventListener('input', generateScheduleTable);
+        
+        document.getElementById('gvhdProphylaxis').addEventListener('change', generateScheduleTable);
+        document.querySelectorAll('input[name="gvhdType"]').forEach(radio => {
+            radio.addEventListener('change', generateScheduleTable);
+        });
+        
+        // 監聽 IVF 輸入欄位變化
+        for (let i = -8; i <= 1; i++) {
+            const ivfInput = document.getElementById(`ivf_${i}`);
+            if (ivfInput) {
+                ivfInput.addEventListener('input', generateScheduleTable);
+            }
+        }
 
         // 格式化日期顯示
         function formatDate(dateString) {
@@ -1228,6 +1520,239 @@
                                         ]
                                     })
                                 ]
+                            }),
+
+                            // 療程時間表
+                            new Paragraph({
+                                children: [new TextRun({ text: "", size: 22 })],
+                                spacing: { before: 300, after: 200 }
+                            }),
+                            
+                            new Table({
+                                width: { size: 9360, type: WidthType.DXA },
+                                rows: (() => {
+                                    const rows = [];
+                                    const d0Date = new Date(formData.d0);
+                                    
+                                    // 第一行：標題
+                                    rows.push(new TableRow({
+                                        children: [
+                                            new TableCell({
+                                                borders,
+                                                columnSpan: 10,
+                                                width: { size: 9360, type: WidthType.DXA },
+                                                shading: { fill: "667eea", type: ShadingType.CLEAR },
+                                                margins: { top: 100, bottom: 100, left: 120, right: 120 },
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ 
+                                                            text: `# BH: ${formData.height} cm, Actual BW: ${formData.weight} kg, Adjusted BW: ${formData.adjustedBW}kg, Adjusted BSA: ${formData.adjustedBSA}m²`, 
+                                                            bold: true,
+                                                            size: 20,
+                                                            color: "FFFFFF"
+                                                        })],
+                                                        alignment: AlignmentType.LEFT
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    }));
+                                    
+                                    // 第二行：Day
+                                    const dayRow = new TableRow({
+                                        children: [
+                                            new TableCell({
+                                                borders,
+                                                width: { size: 936, type: WidthType.DXA },
+                                                shading: { fill: "E0E0E0", type: ShadingType.CLEAR },
+                                                margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: "Day", bold: true, size: 18 })],
+                                                        alignment: AlignmentType.CENTER
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    });
+                                    for (let i = -8; i <= 1; i++) {
+                                        dayRow.addChildElement(new TableCell({
+                                            borders,
+                                            width: { size: 936, type: WidthType.DXA },
+                                            shading: { fill: "E0E0E0", type: ShadingType.CLEAR },
+                                            margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                            children: [
+                                                new Paragraph({
+                                                    children: [new TextRun({ text: i.toString(), bold: true, size: 18 })],
+                                                    alignment: AlignmentType.CENTER
+                                                })
+                                            ]
+                                        }));
+                                    }
+                                    rows.push(dayRow);
+                                    
+                                    // 第三行：星期
+                                    const weekRow = new TableRow({
+                                        children: [
+                                            new TableCell({
+                                                borders,
+                                                width: { size: 936, type: WidthType.DXA },
+                                                shading: { fill: "F0F0F0", type: ShadingType.CLEAR },
+                                                margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: "星期幾", size: 18 })],
+                                                        alignment: AlignmentType.CENTER
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    });
+                                    const weekdays = ['W7', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'];
+                                    for (let i = -8; i <= 1; i++) {
+                                        const date = new Date(d0Date);
+                                        date.setDate(date.getDate() + i);
+                                        weekRow.addChildElement(new TableCell({
+                                            borders,
+                                            width: { size: 936, type: WidthType.DXA },
+                                            shading: { fill: "F0F0F0", type: ShadingType.CLEAR },
+                                            margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                            children: [
+                                                new Paragraph({
+                                                    children: [new TextRun({ text: weekdays[date.getDay()], size: 18 })],
+                                                    alignment: AlignmentType.CENTER
+                                                })
+                                            ]
+                                        }));
+                                    }
+                                    rows.push(weekRow);
+                                    
+                                    // 第四行：日期
+                                    const dateRow = new TableRow({
+                                        children: [
+                                            new TableCell({
+                                                borders,
+                                                width: { size: 936, type: WidthType.DXA },
+                                                shading: { fill: "F8F8F8", type: ShadingType.CLEAR },
+                                                margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: "Date", size: 18 })],
+                                                        alignment: AlignmentType.CENTER
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    });
+                                    for (let i = -8; i <= 1; i++) {
+                                        const dateStr = formatDateRange(formData.d0, i);
+                                        dateRow.addChildElement(new TableCell({
+                                            borders,
+                                            width: { size: 936, type: WidthType.DXA },
+                                            shading: { fill: "F8F8F8", type: ShadingType.CLEAR },
+                                            margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                            children: [
+                                                new Paragraph({
+                                                    children: [new TextRun({ text: dateStr, size: 18 })],
+                                                    alignment: AlignmentType.CENTER
+                                                })
+                                            ]
+                                        }));
+                                    }
+                                    rows.push(dateRow);
+                                    
+                                    // 藥物行
+                                    const medications = [];
+                                    
+                                    if (formData.fludarabine) {
+                                        medications.push({ name: 'Fludarabine', start: formData.fluStartDay, end: formData.fluEndDay });
+                                    }
+                                    if (formData.busulfan) {
+                                        medications.push({ name: 'Busulfan', start: formData.buStartDay, end: formData.buEndDay });
+                                    }
+                                    if (formData.cyclophosphamide) {
+                                        medications.push({ name: 'Endoxan', start: formData.cyStartDay, end: formData.cyEndDay });
+                                    }
+                                    if (formData.atg) {
+                                        medications.push({ name: 'ATG', start: formData.atgStartDay, end: formData.atgEndDay });
+                                    }
+                                    if (formData.gvhdProphylaxis) {
+                                        const gvhdName = formData.gvhdType === 'cyclosporine' ? 'CsA' : 'Tacrolimus';
+                                        medications.push({ name: gvhdName, start: -1, end: 1 });
+                                    }
+                                    
+                                    medications.forEach(med => {
+                                        const medRow = new TableRow({
+                                            children: [
+                                                new TableCell({
+                                                    borders,
+                                                    width: { size: 936, type: WidthType.DXA },
+                                                    margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                                    children: [
+                                                        new Paragraph({
+                                                            children: [new TextRun({ text: med.name, size: 18 })],
+                                                            alignment: AlignmentType.LEFT
+                                                        })
+                                                    ]
+                                                })
+                                            ]
+                                        });
+                                        
+                                        for (let i = -8; i <= 1; i++) {
+                                            const isActive = i >= med.start && i <= med.end;
+                                            medRow.addChildElement(new TableCell({
+                                                borders,
+                                                width: { size: 936, type: WidthType.DXA },
+                                                shading: isActive ? { fill: "D4EDDA", type: ShadingType.CLEAR } : undefined,
+                                                margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: isActive ? 'V' : '', bold: true, size: 18 })],
+                                                        alignment: AlignmentType.CENTER
+                                                    })
+                                                ]
+                                            }));
+                                        }
+                                        
+                                        rows.push(medRow);
+                                    });
+                                    
+                                    // Basic IVF 行
+                                    const ivfRow = new TableRow({
+                                        children: [
+                                            new TableCell({
+                                                borders,
+                                                width: { size: 936, type: WidthType.DXA },
+                                                margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                                children: [
+                                                    new Paragraph({
+                                                        children: [new TextRun({ text: "Basic IVF", size: 18 })],
+                                                        alignment: AlignmentType.LEFT
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    });
+                                    
+                                    for (let i = -8; i <= 1; i++) {
+                                        const ivfInput = document.getElementById(`ivf_${i}`);
+                                        const amount = ivfInput ? ivfInput.value : '1000';
+                                        ivfRow.addChildElement(new TableCell({
+                                            borders,
+                                            width: { size: 936, type: WidthType.DXA },
+                                            margins: { top: 80, bottom: 80, left: 100, right: 100 },
+                                            children: [
+                                                new Paragraph({
+                                                    children: [new TextRun({ text: amount, size: 18 })],
+                                                    alignment: AlignmentType.CENTER
+                                                })
+                                            ]
+                                        }));
+                                    }
+                                    rows.push(ivfRow);
+                                    
+                                    return rows;
+                                })()
                             }),
 
                             // 診斷資訊
