@@ -330,7 +330,7 @@
                 <!-- Basic IVF 輸入欄位 -->
                 <div style="margin-top: 20px;">
                     <h4 style="color: #667eea; font-size: 14px; margin-bottom: 10px;">Basic IVF (mL)</h4>
-                    <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px;">
+                    <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-bottom: 10px;">
                         <div>
                             <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D-8</label>
                             <input type="number" id="ivf_-8" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
@@ -370,6 +370,24 @@
                         <div>
                             <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D+1</label>
                             <input type="number" id="ivf_1" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D+2</label>
+                            <input type="number" id="ivf_2" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D+3</label>
+                            <input type="number" id="ivf_3" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D+4</label>
+                            <input type="number" id="ivf_4" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 11px; display: block; text-align: center; margin-bottom: 5px;">D+5</label>
+                            <input type="number" id="ivf_5" value="1000" step="500" style="width: 100%; padding: 5px; text-align: center; border: 2px solid #e0e0e0; border-radius: 5px;">
                         </div>
                     </div>
                 </div>
@@ -495,20 +513,88 @@
             <!-- GVHD prophylaxis 選項 -->
             <div class="section-title">GVHD Prophylaxis</div>
 
+            <!-- PTCy 整合選項 -->
+            <div class="medication-option">
+                <label>
+                    <input type="checkbox" id="ptcyMain" name="ptcyMain">
+                    <span>PTCy (Post-Transplant Cyclophosphamide)</span>
+                </label>
+                <div class="dosage-options" id="ptcyMainOptions">
+                    <label>
+                        <input type="radio" name="ptcyType" value="ric" checked>
+                        PTCy RIC (14.5 mg/kg/day)
+                    </label>
+                    <label>
+                        <input type="radio" name="ptcyType" value="40">
+                        PTCy (40 mg/kg/day)
+                    </label>
+                    <label>
+                        <input type="radio" name="ptcyType" value="50">
+                        PTCy (50 mg/kg/day)
+                    </label>
+                    
+                    <!-- PTCy RIC 天數設定 -->
+                    <div id="ptcyRicDays" style="margin-top: 10px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
+                                <input type="number" id="ptcyStartDay" name="ptcyStartDay" value="-8" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
+                                <input type="number" id="ptcyEndDay" name="ptcyEndDay" value="-7" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PTCy 40/50 天數設定 -->
+                    <div id="ptcy4050Days" style="margin-top: 10px; display: none;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
+                                <input type="number" id="ptcy50StartDay" name="ptcy50StartDay" value="3" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
+                                <input type="number" id="ptcy50EndDay" name="ptcy50EndDay" value="4" 
+                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="medication-option">
                 <label>
                     <input type="checkbox" id="gvhdProphylaxis" name="gvhdProphylaxis">
-                    <span>GVHD Prophylaxis from Day -1</span>
+                    <span>Calcineurin Inhibitors</span>
                 </label>
                 <div class="dosage-options" id="gvhdOptions">
-                    <label>
-                        <input type="radio" name="gvhdType" value="tacrolimus" checked>
-                        Tacrolimus
-                    </label>
-                    <label>
-                        <input type="radio" name="gvhdType" value="cyclosporine">
-                        Cyclosporine (CSA)
-                    </label>
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-weight: normal;">藥物類型:</label><br>
+                        <label style="display: inline-block; margin-right: 15px;">
+                            <input type="radio" name="gvhdType" value="tacrolimus" checked>
+                            Tacrolimus
+                        </label>
+                        <label style="display: inline-block;">
+                            <input type="radio" name="gvhdType" value="cyclosporine">
+                            Cyclosporine (CSA)
+                        </label>
+                    </div>
+                    <div>
+                        <label style="font-weight: normal;">開始日期:</label><br>
+                        <label style="display: inline-block; margin-right: 15px;">
+                            <input type="radio" name="gvhdStartDay" value="-1" checked>
+                            from Day -1
+                        </label>
+                        <label style="display: inline-block;">
+                            <input type="radio" name="gvhdStartDay" value="5">
+                            from Day +5
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -572,54 +658,6 @@
                         <input type="radio" name="mmfType" value="d5">
                         From D+5 (10.8 mg/kg TID)
                     </label>
-                </div>
-            </div>
-
-            <!-- PTCy RIC 選項 -->
-            <div class="medication-option">
-                <label>
-                    <input type="checkbox" id="ptcy" name="ptcy">
-                    <span>PTCy RIC (14.5 mg/kg/day)</span>
-                </label>
-                <div class="dosage-options" id="ptcyOptions">
-                    <div style="margin-top: 10px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <div>
-                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
-                                <input type="number" id="ptcyStartDay" name="ptcyStartDay" value="-8" 
-                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
-                            </div>
-                            <div>
-                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
-                                <input type="number" id="ptcyEndDay" name="ptcyEndDay" value="-7" 
-                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PTCy 50mg/kg 選項 -->
-            <div class="medication-option">
-                <label>
-                    <input type="checkbox" id="ptcy50" name="ptcy50">
-                    <span>PTCy (50 mg/kg/day)</span>
-                </label>
-                <div class="dosage-options" id="ptcy50Options">
-                    <div style="margin-top: 10px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <div>
-                                <label style="font-size: 12px; font-weight: normal;">Start Day:</label>
-                                <input type="number" id="ptcy50StartDay" name="ptcy50StartDay" value="3" 
-                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
-                            </div>
-                            <div>
-                                <label style="font-size: 12px; font-weight: normal;">End Day:</label>
-                                <input type="number" id="ptcy50EndDay" name="ptcy50EndDay" value="4" 
-                                       style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px;">
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -773,25 +811,36 @@
             }
         });
 
-        // 控制 PTCy 選項的顯示
-        document.getElementById('ptcy').addEventListener('change', function() {
-            const ptcyOptions = document.getElementById('ptcyOptions');
+        // 控制 PTCy 整合選項的顯示
+        document.getElementById('ptcyMain').addEventListener('change', function() {
+            const ptcyMainOptions = document.getElementById('ptcyMainOptions');
             if (this.checked) {
-                ptcyOptions.classList.add('active');
+                ptcyMainOptions.classList.add('active');
+                // 根據選擇的類型顯示對應的天數設定
+                updatePTCyDaysDisplay();
             } else {
-                ptcyOptions.classList.remove('active');
+                ptcyMainOptions.classList.remove('active');
             }
         });
 
-        // 控制 PTCy 50mg/kg 選項的顯示
-        document.getElementById('ptcy50').addEventListener('change', function() {
-            const ptcy50Options = document.getElementById('ptcy50Options');
-            if (this.checked) {
-                ptcy50Options.classList.add('active');
-            } else {
-                ptcy50Options.classList.remove('active');
-            }
+        // 監聽 PTCy 類型變化
+        document.querySelectorAll('input[name="ptcyType"]').forEach(radio => {
+            radio.addEventListener('change', updatePTCyDaysDisplay);
         });
+
+        function updatePTCyDaysDisplay() {
+            const ptcyType = document.querySelector('input[name="ptcyType"]:checked')?.value;
+            const ricDays = document.getElementById('ptcyRicDays');
+            const days4050 = document.getElementById('ptcy4050Days');
+            
+            if (ptcyType === 'ric') {
+                ricDays.style.display = 'block';
+                days4050.style.display = 'none';
+            } else {
+                ricDays.style.display = 'none';
+                days4050.style.display = 'block';
+            }
+        }
 
         // 計算年齡
         document.getElementById('birthday').addEventListener('change', function() {
@@ -887,7 +936,7 @@
                 const postCyDayIVF = Math.round((adjustedBW * 30) / 500) * 500;
                 
                 // 設定所有天數的預設值
-                for (let i = -8; i <= 1; i++) {
+                for (let i = -8; i <= 5; i++) {
                     const ivfInput = document.getElementById(`ivf_${i}`);
                     if (ivfInput) {
                         // Cy 使用當天
@@ -906,7 +955,7 @@
                 }
             } else {
                 // 如果沒有選擇 Cy，所有天數都是 1000
-                for (let i = -8; i <= 1; i++) {
+                for (let i = -8; i <= 5; i++) {
                     const ivfInput = document.getElementById(`ivf_${i}`);
                     if (ivfInput) {
                         ivfInput.value = 1000;
@@ -962,7 +1011,7 @@
             // Day 行
             tableHTML += '<tr style="background: #e0e0e0; font-weight: bold;">';
             tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">Day</td>';
-            for (let i = -8; i <= 1; i++) {
+            for (let i = -8; i <= 5; i++) {
                 tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${i}</td>`;
             }
             tableHTML += '</tr>';
@@ -970,7 +1019,7 @@
             // 星期行
             tableHTML += '<tr style="background: #f0f0f0;">';
             tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">星期幾</td>';
-            for (let i = -8; i <= 1; i++) {
+            for (let i = -8; i <= 5; i++) {
                 const date = new Date(d0Date);
                 date.setDate(date.getDate() + i);
                 const weekdays = ['W7', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'];
@@ -981,7 +1030,7 @@
             // 日期行
             tableHTML += '<tr style="background: #f8f8f8;">';
             tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">Date</td>';
-            for (let i = -8; i <= 1; i++) {
+            for (let i = -8; i <= 5; i++) {
                 const date = new Date(d0Date);
                 date.setDate(date.getDate() + i);
                 const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -1025,14 +1074,15 @@
             if (document.getElementById('gvhdProphylaxis').checked) {
                 const gvhdType = document.querySelector('input[name="gvhdType"]:checked')?.value;
                 const gvhdName = gvhdType === 'cyclosporine' ? 'CsA' : 'Tacrolimus';
-                medications.push({ name: gvhdName, start: -1, end: 1 });
+                const gvhdStartDay = parseInt(document.querySelector('input[name="gvhdStartDay"]:checked')?.value) || -1;
+                medications.push({ name: gvhdName, start: gvhdStartDay, end: 1 });
             }
             
             // 繪製每個藥物的行
             medications.forEach(med => {
                 tableHTML += '<tr>';
                 tableHTML += `<td style="border: 1px solid #ddd; padding: 8px;">${med.name}</td>`;
-                for (let i = -8; i <= 1; i++) {
+                for (let i = -8; i <= 5; i++) {
                     const isActive = i >= med.start && i <= med.end;
                     const cellContent = isActive ? 'V' : '';
                     const bgColor = isActive ? '#d4edda' : 'white';
@@ -1044,9 +1094,12 @@
             // Basic IVF 行
             tableHTML += '<tr>';
             tableHTML += '<td style="border: 1px solid #ddd; padding: 8px;">Basic IVF</td>';
-            for (let i = -8; i <= 1; i++) {
-                const ivfInput = document.getElementById(`ivf_${i}`);
-                const amount = ivfInput ? ivfInput.value : '1000';
+            for (let i = -8; i <= 5; i++) {
+                let amount = '1000';
+                if (i >= -8 && i <= 1) {
+                    const ivfInput = document.getElementById(`ivf_${i}`);
+                    amount = ivfInput ? ivfInput.value : '1000';
+                }
                 tableHTML += `<td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${amount}</td>`;
             }
             tableHTML += '</tr>';
@@ -1083,7 +1136,7 @@
         });
         
         // 監聽 IVF 輸入欄位變化
-        for (let i = -8; i <= 1; i++) {
+        for (let i = -8; i <= 5; i++) {
             const ivfInput = document.getElementById(`ivf_${i}`);
             if (ivfInput) {
                 ivfInput.addEventListener('input', generateScheduleTable);
@@ -1162,10 +1215,10 @@
                     mtxDelay: document.getElementById('mtxDelay').checked,
                     mmf: document.getElementById('mmf').checked,
                     mmfType: document.querySelector('input[name="mmfType"]:checked')?.value || 'd0',
-                    ptcy: document.getElementById('ptcy').checked,
+                    ptcyMain: document.getElementById('ptcyMain').checked,
+                    ptcyType: document.querySelector('input[name="ptcyType"]:checked')?.value || 'ric',
                     ptcyStartDay: parseInt(document.getElementById('ptcyStartDay').value) || -8,
                     ptcyEndDay: parseInt(document.getElementById('ptcyEndDay').value) || -7,
-                    ptcy50: document.getElementById('ptcy50').checked,
                     ptcy50StartDay: parseInt(document.getElementById('ptcy50StartDay').value) || 3,
                     ptcy50EndDay: parseInt(document.getElementById('ptcy50EndDay').value) || 4,
                     admissionWard: document.getElementById('admissionWard').value,
@@ -1174,7 +1227,8 @@
                     letermovirDose: document.querySelector('input[name="letermovirDose"]:checked')?.value || '1',
                     vemlidy: document.getElementById('vemlidy').checked,
                     gvhdProphylaxis: document.getElementById('gvhdProphylaxis').checked,
-                    gvhdType: document.querySelector('input[name="gvhdType"]:checked')?.value || 'tacrolimus'
+                    gvhdType: document.querySelector('input[name="gvhdType"]:checked')?.value || 'tacrolimus',
+                    gvhdStartDay: parseInt(document.querySelector('input[name="gvhdStartDay"]:checked')?.value) || -1
                 };
 
                 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, 
@@ -1247,7 +1301,9 @@
                 // GVHD prophylaxis
                 if (formData.gvhdProphylaxis) {
                     const adjustedBW = parseFloat(formData.adjustedBW);
-                    const dMinus1Date = formatDateRange(formData.d0, -1);
+                    const gvhdStartDay = formData.gvhdStartDay; // -1 或 5
+                    const gvhdStartDate = formatDateRange(formData.d0, gvhdStartDay);
+                    const dayLabel = gvhdStartDay < 0 ? `D${gvhdStartDay}` : `D+${gvhdStartDay}`;
                     
                     if (formData.gvhdType === 'tacrolimus') {
                         // 計算 Tacrolimus 劑量
@@ -1263,7 +1319,7 @@
                             }),
                             new Paragraph({
                                 children: [new TextRun({ 
-                                    text: `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from Day -1 (${dMinus1Date})`, 
+                                    text: `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate})`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
@@ -1281,7 +1337,7 @@
                             }),
                             new Paragraph({
                                 children: [new TextRun({ 
-                                    text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) ${roundedDose} mg in normal saline 250ml IF 3 hours Q12H from D-1 (${dMinus1Date})`, 
+                                    text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) ${roundedDose} mg in normal saline 250ml IF 3 hours Q12H from ${dayLabel} (${gvhdStartDate})`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
@@ -1671,7 +1727,7 @@
                                         children: [
                                             new TableCell({
                                                 borders,
-                                                columnSpan: 10,
+                                                columnSpan: 14,
                                                 width: { size: 9360, type: WidthType.DXA },
                                                 shading: { fill: "667eea", type: ShadingType.CLEAR },
                                                 margins: { top: 100, bottom: 100, left: 120, right: 120 },
@@ -1707,7 +1763,7 @@
                                             })
                                         ]
                                     });
-                                    for (let i = -8; i <= 1; i++) {
+                                    for (let i = -8; i <= 5; i++) {
                                         dayRow.addChildElement(new TableCell({
                                             borders,
                                             width: { size: 936, type: WidthType.DXA },
@@ -1741,7 +1797,7 @@
                                         ]
                                     });
                                     const weekdays = ['W7', 'W1', 'W2', 'W3', 'W4', 'W5', 'W6'];
-                                    for (let i = -8; i <= 1; i++) {
+                                    for (let i = -8; i <= 5; i++) {
                                         const date = new Date(d0Date);
                                         date.setDate(date.getDate() + i);
                                         weekRow.addChildElement(new TableCell({
@@ -1776,7 +1832,7 @@
                                             })
                                         ]
                                     });
-                                    for (let i = -8; i <= 1; i++) {
+                                    for (let i = -8; i <= 5; i++) {
                                         const dateStr = formatDateRange(formData.d0, i);
                                         dateRow.addChildElement(new TableCell({
                                             borders,
@@ -1810,7 +1866,8 @@
                                     }
                                     if (formData.gvhdProphylaxis) {
                                         const gvhdName = formData.gvhdType === 'cyclosporine' ? 'CsA' : 'Tacrolimus';
-                                        medications.push({ name: gvhdName, start: -1, end: 1 });
+                                        const gvhdStartDay = formData.gvhdStartDay; // -1 或 5
+                                        medications.push({ name: gvhdName, start: gvhdStartDay, end: 1 });
                                     }
                                     
                                     medications.forEach(med => {
@@ -1830,7 +1887,7 @@
                                             ]
                                         });
                                         
-                                        for (let i = -8; i <= 1; i++) {
+                                        for (let i = -8; i <= 5; i++) {
                                             const isActive = i >= med.start && i <= med.end;
                                             medRow.addChildElement(new TableCell({
                                                 borders,
@@ -1866,9 +1923,12 @@
                                         ]
                                     });
                                     
-                                    for (let i = -8; i <= 1; i++) {
-                                        const ivfInput = document.getElementById(`ivf_${i}`);
-                                        const amount = ivfInput ? ivfInput.value : '1000';
+                                    for (let i = -8; i <= 5; i++) {
+                                        let amount = '1000';
+                                        if (i >= -8 && i <= 5) {
+                                            const ivfInput = document.getElementById(`ivf_${i}`);
+                                            amount = ivfInput ? ivfInput.value : '1000';
+                                        }
                                         ivfRow.addChildElement(new TableCell({
                                             borders,
                                             width: { size: 936, type: WidthType.DXA },
@@ -1960,6 +2020,35 @@
                             new Paragraph({
                                 children: [new TextRun({ text: formData.conditioning, size: 24 })],
                                 spacing: { after: 200 }
+                            }),
+
+                            // Anti-emesis order
+                            new Paragraph({
+                                children: [
+                                    new TextRun({ text: "# Anti-emesis order:", bold: true, size: 24 })
+                                ],
+                                spacing: { after: 100 }
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({ 
+                                    text: `1. Emend PO QD before chemotherapy: 125 mg on D-8 (${formatDateRange(formData.dMinus8, 0)}) (健保), then 80 mg on D-7 ~ D-6 (${formatDateRange(formData.dMinus8, 1)}~${formatDateRange(formData.dMinus8, 2)}) (健保), 125 mg on D-5 ~ D-3 (${formatDateRange(formData.dMinus8, 3)}~${formatDateRange(formData.dMinus8, 5)}) (自費)`, 
+                                    size: 24 
+                                })],
+                                spacing: { after: 100 }
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({ 
+                                    text: `2. Kytril 1 amp QD iv drip before chemotherapy on D-8 ~ D-3 (${formatDateRange(formData.dMinus8, 0)}~${formatDateRange(formData.dMinus8, 5)}) (健保)`, 
+                                    size: 24 
+                                })],
+                                spacing: { after: 100 }
+                            }),
+                            new Paragraph({
+                                children: [new TextRun({ 
+                                    text: `3. Ativan 1~2 mg iv q4h prn or Vena 30 mg iv q4h prn or Primperan 10 mg ivf q6h prn or Rinderon 4 mg iv q6h prn`, 
+                                    size: 24 
+                                })],
+                                spacing: { after: 300 }
                             }),
 
                             // TBI section
@@ -2375,98 +2464,90 @@
                                 return mmfParagraphs;
                             })() : []),
 
-                            // PTCy RIC section
-                            ...(formData.ptcy ? (() => {
+                            // PTCy section (整合)
+                            ...(formData.ptcyMain ? (() => {
                                 const ptcyParagraphs = [];
-                                
-                                // 計算 PTCy 劑量
                                 const adjustedBW = parseFloat(formData.adjustedBW);
-                                const ptcyDose = Math.round(adjustedBW * 14.5); // 14.5 mg/kg，四捨五入到整數
                                 
-                                const ptcyStartDate = formatDateRange(formData.d0, formData.ptcyStartDay);
-                                const ptcyEndDate = formatDateRange(formData.d0, formData.ptcyEndDay);
-                                
-                                ptcyParagraphs.push(
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# Endoxan (14.5mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 1 hours QD on D${formData.ptcyStartDay} ~ D${formData.ptcyEndDay} (${ptcyStartDate}~${ptcyEndDate})`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    })
-                                );
+                                if (formData.ptcyType === 'ric') {
+                                    // PTCy RIC (14.5 mg/kg/day)
+                                    const ptcyDose = Math.round(adjustedBW * 14.5);
+                                    const ptcyStartDate = formatDateRange(formData.d0, formData.ptcyStartDay);
+                                    const ptcyEndDate = formatDateRange(formData.d0, formData.ptcyEndDay);
+                                    
+                                    ptcyParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Endoxan (14.5mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 1 hours QD on D${formData.ptcyStartDay} ~ D${formData.ptcyEndDay} (${ptcyStartDate}~${ptcyEndDate})`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                } else {
+                                    // PTCy 40 or 50 mg/kg/day
+                                    const dosePerKg = parseInt(formData.ptcyType); // 40 或 50
+                                    const ptcyDose = Math.round(adjustedBW * dosePerKg);
+                                    const mesnaDose = Math.round(adjustedBW * 25);
+                                    
+                                    const ptcyStartDate = formatDateRange(formData.d0, formData.ptcy50StartDay);
+                                    const ptcyEndDate = formatDateRange(formData.d0, formData.ptcy50EndDay);
+                                    const d0Date = formatDateRange(formData.d0, 0);
+                                    
+                                    ptcyParagraphs.push(
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Endoxan (${dosePerKg}mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 2.5 hours QD on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcyStartDate}~${ptcyEndDate}) (start 24 hours after last Busulfan dosing)`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# Check urine analysis on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcyStartDate}~${ptcyEndDate}) and D0 (${d0Date})`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        }),
+                                        new Paragraph({
+                                            children: [new TextRun({ 
+                                                text: `# No immunosuppressive agents were administered until 24 hours after the last dose of post-transplantation Cy, including corticosteroids.`, 
+                                                bold: true,
+                                                size: 24 
+                                            })],
+                                            spacing: { after: 200 }
+                                        })
+                                    );
+                                }
                                 
                                 return ptcyParagraphs;
-                            })() : []),
-
-                            // PTCy 50mg/kg section
-                            ...(formData.ptcy50 ? (() => {
-                                const ptcy50Paragraphs = [];
-                                
-                                // 計算 PTCy 50 劑量
-                                const adjustedBW = parseFloat(formData.adjustedBW);
-                                const ptcy50Dose = Math.round(adjustedBW * 50); // 50 mg/kg，四捨五入到整數
-                                
-                                // 計算 Mesna 劑量 (25 mg/kg)
-                                const mesnaDose = Math.round(adjustedBW * 25);
-                                
-                                const ptcy50StartDate = formatDateRange(formData.d0, formData.ptcy50StartDay);
-                                const ptcy50EndDate = formatDateRange(formData.d0, formData.ptcy50EndDay);
-                                const d0Date = formatDateRange(formData.d0, 0);
-                                
-                                ptcy50Paragraphs.push(
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# Endoxan (50mg/kg/day) ${ptcy50Dose} mg in normal saline 100cc IF 2.5 hours QD on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcy50StartDate}~${ptcy50EndDate}) (start 24 hours after last Busulfan dosing)`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    }),
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    }),
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    }),
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    }),
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# Check urine analysis on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcy50StartDate}~${ptcy50EndDate}) and D0 (${d0Date})`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    }),
-                                    new Paragraph({
-                                        children: [new TextRun({ 
-                                            text: `# No immunosuppressive agents were administered until 24 hours after the last dose of post-transplantation Cy, including corticosteroids.`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
-                                        spacing: { after: 200 }
-                                    })
-                                );
-                                
-                                return ptcy50Paragraphs;
                             })() : []),
 
                             // Medication 標題
