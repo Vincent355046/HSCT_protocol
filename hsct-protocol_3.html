@@ -1756,7 +1756,15 @@
                 };
 
                 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, 
-                        BorderStyle, WidthType, ShadingType, AlignmentType, VerticalAlign } = docx;
+                        BorderStyle, WidthType, ShadingType, AlignmentType, VerticalAlign, Header } = docx;
+
+                // 輔助函數：創建帶 Arial 字體的 TextRun
+                const createTextRun = (options) => {
+                    return new TextRun({
+                        font: "Arial",
+                        ...options
+                    });
+                };
 
                 const border = {
                     style: BorderStyle.SINGLE,
@@ -1785,7 +1793,7 @@
                 if (formData.lorazepam) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Lorazepam 1~2 mg IV Q6HPRN or Diphenhydramine 30 mg IV Q6HPRN if insomnia`, size: 24 })],
+                            children: [createTextRun({ text: `- Lorazepam 1~2 mg IV Q6HPRN or Diphenhydramine 30 mg IV Q6HPRN if insomnia`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1794,7 +1802,7 @@
                 if (formData.feburic) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Feburic 0.5# PO QD on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
+                            children: [createTextRun({ text: `- Feburic 0.5# PO QD on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1803,7 +1811,7 @@
                 if (formData.micafungin) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Micafungin 50 mg in normal saline 100 ml IF 60 minutes QD from D-8 (${dMinus8Formatted})`, size: 24 })],
+                            children: [createTextRun({ text: `- Micafungin 50 mg in normal saline 100 ml IF 60 minutes QD from D-8 (${dMinus8Formatted})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1812,7 +1820,7 @@
                 if (formData.baktar) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Baktar 1# QD PO on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
+                            children: [createTextRun({ text: `- Baktar 1# QD PO on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1821,7 +1829,7 @@
                 if (formData.valtrex) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Valtrex 1# BID PO from D-8 (${dMinus8Formatted})`, size: 24 })],
+                            children: [createTextRun({ text: `- Valtrex 1# BID PO from D-8 (${dMinus8Formatted})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1830,7 +1838,7 @@
                 if (formData.cefepime) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Cefepime 1g IV Q12H on D0 ~ D+2 (${d0Formatted}~${formatDateRange(formData.d0, 2)})`, size: 24 })],
+                            children: [createTextRun({ text: `- Cefepime 1g IV Q12H on D0 ~ D+2 (${d0Formatted}~${formatDateRange(formData.d0, 2)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1839,7 +1847,7 @@
                 if (formData.levofloxacin) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Levofloxacin 750 mg PO QDAC PRN if WBC < 1000 k/μL`, size: 24 })],
+                            children: [createTextRun({ text: `- Levofloxacin 750 mg PO QDAC PRN if WBC < 1000 k/μL`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1848,7 +1856,7 @@
                 if (formData.folicAcid) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Folic acid 1# PO QD from D+1 (${formatDateRange(formData.d0, 1)})`, size: 24 })],
+                            children: [createTextRun({ text: `- Folic acid 1# PO QD from D+1 (${formatDateRange(formData.d0, 1)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1857,7 +1865,7 @@
                 if (formData.gcsf) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- G-CSF 5 ug/kg IF QD from D+5 (${formatDateRange(formData.d0, 5)})`, size: 24 })],
+                            children: [createTextRun({ text: `- G-CSF 5 ug/kg IF QD from D+5 (${formatDateRange(formData.d0, 5)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1866,7 +1874,7 @@
                 if (formData.alanylGlutamine) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: `- Alanyl Glutamine 1BT IF 6 hours QD from D-8 (${dMinus8Formatted}) (optional, 自費)`, size: 24 })],
+                            children: [createTextRun({ text: `- Alanyl Glutamine 1BT IF 6 hours QD from D-8 (${dMinus8Formatted}) (optional, 自費)`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1891,11 +1899,11 @@
                         
                         otherMedicationsParagraphs.push(
                             new Paragraph({
-                                children: [new TextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
+                                children: [createTextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
                                 spacing: { before: 200, after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate})`, 
                                     size: 24 
                                 })],
@@ -1909,11 +1917,11 @@
                         
                         otherMedicationsParagraphs.push(
                             new Paragraph({
-                                children: [new TextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
+                                children: [createTextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
                                 spacing: { before: 200, after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) ${roundedDose} mg in normal saline 250ml IF 3 hours Q12H from ${dayLabel} (${gvhdStartDate})`, 
                                     size: 24 
                                 })],
@@ -1931,11 +1939,13 @@
                     
                     otherMedicationsParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: "(3) Stem cell infusion", bold: true, size: 26 })],
+                            children: [createTextRun({ text: "(3) Stem cell infusion", bold: true, size: 26 })],
+                            alignment: AlignmentType.CENTER,
+                            shading: { fill: "D3D3D3", type: ShadingType.CLEAR },
                             spacing: { before: 300, after: 200 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ text: "# Stem cell transplantation order:", bold: true, size: 24 })],
+                            children: [createTextRun({ text: "# Stem cell transplantation order:", bold: true, size: 24 })],
                             spacing: { before: 200, after: 100 }
                         })
                     );
@@ -1945,7 +1955,7 @@
                         const cd34Count = formData.pbscCD34 || '??';
                         otherMedicationsParagraphs.push(
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `# Stem cell infusion (${cd34Count}×10⁶/kg) on D0 (${d0Date}) as ward routine: EKG monitor, Vena 1 amp iv or Solu-cortef 100 iv before stem cell transfusion, No leukocyte filter, O2 prn, cryo stem cells/lymphocytes as VS's order`, 
                                     size: 24 
                                 })],
@@ -1958,28 +1968,28 @@
                         const pbscCD34 = formData.bmPbscCD34 || '??';
                         otherMedicationsParagraphs.push(
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `# Bone marrow stem cell infusion (${bmCD34}×10⁶/kg CD34+ cell count) on D0 (${d0Date}), then peripheral blood stem cell infusion (${pbscCD34}×10⁶/kg CD34+ cell count) on D1 (${d1Date}) as ward routine. (may extend to D2 if inadequate CD34+ cells)`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `# On EKG monitor, O2 use PRN during stem cell infusion.`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `# No leukocyte filter usage.`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `# Diphenhydramine 30 mg or hydrocortisone 100 mg IV before stem cell transfusion.`, 
                                     size: 24 
                                 })],
@@ -1993,50 +2003,52 @@
                 if (formData.bloodTransfusion && formData.donorBloodType && formData.recipientBloodType) {
                     otherMedicationsParagraphs.push(
                         new Paragraph({
-                            children: [new TextRun({ text: "(4) Blood transfusion order", bold: true, size: 26 })],
+                            children: [createTextRun({ text: "(4) Blood transfusion order", bold: true, size: 26 })],
+                            alignment: AlignmentType.CENTER,
+                            shading: { fill: "D3D3D3", type: ShadingType.CLEAR },
                             spacing: { before: 300, after: 200 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ text: "# Blood transfusion order:", bold: true, size: 24 })],
+                            children: [createTextRun({ text: "# Blood transfusion order:", bold: true, size: 24 })],
                             spacing: { before: 200, after: 100 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ 
+                            children: [createTextRun({ 
                                 text: `# Blood type: Donor ${formData.donorBloodType}; Recipient: ${formData.recipientBloodType}`, 
                                 size: 24 
                             })],
                             spacing: { after: 100 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ 
+                            children: [createTextRun({ 
                                 text: `# Choice of RBC product: ${formData.rbcProduct}`, 
                                 size: 24 
                             })],
                             spacing: { after: 100 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ 
+                            children: [createTextRun({ 
                                 text: `# Choice of Platelet, FFP or cryoprecipitate: ${formData.plateletProduct}`, 
                                 size: 24 
                             })],
                             spacing: { after: 100 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ 
+                            children: [createTextRun({ 
                                 text: `# With irradiation except for FFP, cryoprecipitate and stem cell`, 
                                 size: 24 
                             })],
                             spacing: { after: 100 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ 
+                            children: [createTextRun({ 
                                 text: `# With leukocyte filter except for FFP, cryoprecipitate, "leukocyte-depleted" products, and stem cell`, 
                                 size: 24 
                             })],
                             spacing: { after: 100 }
                         }),
                         new Paragraph({
-                            children: [new TextRun({ 
+                            children: [createTextRun({ 
                                 text: `# With premedication: diphenhydramine 1 amp IVPRN or hydrocortisone 100mg IVPRN`, 
                                 size: 24 
                             })],
@@ -2061,10 +2073,63 @@
                                 }
                             }
                         },
+                        headers: {
+                            default: new Header({
+                                children: [
+                                    new Table({
+                                        width: { size: 9360, type: WidthType.DXA },
+                                        borders: {
+                                            top: { style: BorderStyle.NONE },
+                                            bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                                            left: { style: BorderStyle.NONE },
+                                            right: { style: BorderStyle.NONE },
+                                            insideHorizontal: { style: BorderStyle.NONE },
+                                            insideVertical: { style: BorderStyle.NONE }
+                                        },
+                                        rows: [
+                                            new TableRow({
+                                                children: [
+                                                    new TableCell({
+                                                        width: { size: 4680, type: WidthType.DXA },
+                                                        borders: {
+                                                            top: { style: BorderStyle.NONE },
+                                                            bottom: { style: BorderStyle.NONE },
+                                                            left: { style: BorderStyle.NONE },
+                                                            right: { style: BorderStyle.NONE }
+                                                        },
+                                                        children: [
+                                                            new Paragraph({
+                                                                children: [createTextRun({ text: `${formData.name}  ${formData.chartNo}`, size: 20 })],
+                                                                alignment: AlignmentType.LEFT
+                                                            })
+                                                        ]
+                                                    }),
+                                                    new TableCell({
+                                                        width: { size: 4680, type: WidthType.DXA },
+                                                        borders: {
+                                                            top: { style: BorderStyle.NONE },
+                                                            bottom: { style: BorderStyle.NONE },
+                                                            left: { style: BorderStyle.NONE },
+                                                            right: { style: BorderStyle.NONE }
+                                                        },
+                                                        children: [
+                                                            new Paragraph({
+                                                                children: [createTextRun({ text: `${formData.age}  ${formData.sex}`, size: 20 })],
+                                                                alignment: AlignmentType.RIGHT
+                                                            })
+                                                        ]
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    })
+                                ]
+                            })
+                        },
                         children: [
                             new Paragraph({
                                 children: [
-                                    new TextRun({
+                                    createTextRun({
                                         text: "HSCT Protocol",
                                         bold: true,
                                         size: 32
@@ -2077,8 +2142,10 @@
                             // (1) General measurement order 大標題
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "(1) General measurement order", bold: true, size: 26 })
+                                    createTextRun({ text: "(1) General measurement order", bold: true, size: 26 })
                                 ],
+                                alignment: AlignmentType.CENTER,
+                                shading: { fill: "D3D3D3", type: ShadingType.CLEAR },
                                 spacing: { before: 200, after: 300 }
                             }),
                             
@@ -2097,7 +2164,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Name", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Name", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2109,7 +2176,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: formData.name, size: 22 })],
+                                                        children: [createTextRun({ text: formData.name, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2122,7 +2189,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Birthday", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Birthday", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2134,7 +2201,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: formData.birthday, size: 22 })],
+                                                        children: [createTextRun({ text: formData.birthday, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2151,7 +2218,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Chart No.", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Chart No.", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2163,7 +2230,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: formData.chartNo, size: 22 })],
+                                                        children: [createTextRun({ text: formData.chartNo, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2176,7 +2243,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Age", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Age", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2188,7 +2255,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: formData.age, size: 22 })],
+                                                        children: [createTextRun({ text: formData.age, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2205,7 +2272,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "VS", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "VS", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2217,7 +2284,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: formData.vs, size: 22 })],
+                                                        children: [createTextRun({ text: formData.vs, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2230,7 +2297,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Sex", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Sex", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2242,7 +2309,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: formData.sex, size: 22 })],
+                                                        children: [createTextRun({ text: formData.sex, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2259,7 +2326,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Height", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Height", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2271,7 +2338,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.height} cm`, size: 22 })],
+                                                        children: [createTextRun({ text: `${formData.height} cm`, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2284,7 +2351,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Weight", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Weight", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2296,7 +2363,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.weight} kg`, size: 22 })],
+                                                        children: [createTextRun({ text: `${formData.weight} kg`, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2313,7 +2380,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "BSA", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "BSA", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2325,7 +2392,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.bsa} m²`, size: 22 })],
+                                                        children: [createTextRun({ text: `${formData.bsa} m²`, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2338,7 +2405,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Adjusted BW", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Adjusted BW", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2350,7 +2417,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.adjustedBW} kg`, size: 22 })],
+                                                        children: [createTextRun({ text: `${formData.adjustedBW} kg`, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2367,7 +2434,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Adjusted BSA", bold: true, size: 22 })],
+                                                        children: [createTextRun({ text: "Adjusted BSA", bold: true, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2380,7 +2447,7 @@
                                                 verticalAlign: VerticalAlign.CENTER,
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: `${formData.adjustedBSA} m²`, size: 22 })],
+                                                        children: [createTextRun({ text: `${formData.adjustedBSA} m²`, size: 22 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2392,76 +2459,76 @@
 
                             // 診斷資訊
                             new Paragraph({
-                                children: [new TextRun({ text: "", size: 22 })],
+                                children: [createTextRun({ text: "", size: 22 })],
                                 spacing: { before: 300, after: 100 }
                             }),
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Diagnosis:", bold: true, size: 24 }),
-                                    new TextRun({ text: "", size: 24 })
+                                    createTextRun({ text: "# Diagnosis:", bold: true, size: 24 }),
+                                    createTextRun({ text: "", size: 24 })
                                 ],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ text: formData.diagnosis, size: 24 })],
+                                children: [createTextRun({ text: formData.diagnosis, size: 24 })],
                                 spacing: { after: 200 }
                             }),
 
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Comorbidity:", bold: true, size: 24 })
+                                    createTextRun({ text: "# Comorbidity:", bold: true, size: 24 })
                                 ],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ text: formData.comorbidity || "(手動填)", size: 24 })],
+                                children: [createTextRun({ text: formData.comorbidity || "(手動填)", size: 24 })],
                                 spacing: { after: 200 }
                             }),
 
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Status:", bold: true, size: 24 })
+                                    createTextRun({ text: "# Status:", bold: true, size: 24 })
                                 ],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ text: `Indication: ${formData.indication}`, size: 24 })],
+                                children: [createTextRun({ text: `Indication: ${formData.indication}`, size: 24 })],
                                 spacing: { after: 200 }
                             }),
 
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Allergy:", bold: true, size: 24 })
+                                    createTextRun({ text: "# Allergy:", bold: true, size: 24 })
                                 ],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ text: formData.allergy, size: 24 })],
+                                children: [createTextRun({ text: formData.allergy, size: 24 })],
                                 spacing: { after: 200 }
                             }),
 
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Vital signs, I/O, BW, AG, Diet: as ward routine", bold: true, size: 24 })
+                                    createTextRun({ text: "# Vital signs, I/O, BW, AG, Diet: as ward routine", bold: true, size: 24 })
                                 ],
                                 spacing: { after: 200 }
                             }),
 
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: `# Admission to ${formData.admissionWard} on D-8: ${dMinus8FullDate}, and D0: ${d0FullDate}`, bold: true, size: 24 })
+                                    createTextRun({ text: `# Admission to ${formData.admissionWard} on D-8: ${dMinus8FullDate}, and D0: ${d0FullDate}`, bold: true, size: 24 })
                                 ],
                                 spacing: { after: 200 }
                             }),
 
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Conditioning:", bold: true, size: 24 })
+                                    createTextRun({ text: "# Conditioning:", bold: true, size: 24 })
                                 ],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ text: formData.conditioning, size: 24 })],
+                                children: [createTextRun({ text: formData.conditioning, size: 24 })],
                                 spacing: { after: 200 }
                             }),
 
@@ -2469,7 +2536,7 @@
                             ...(medicationParagraphs.length > 0 ? [
                                 new Paragraph({
                                     children: [
-                                        new TextRun({ text: "# Medication:", bold: true, size: 24 })
+                                        createTextRun({ text: "# Medication:", bold: true, size: 24 })
                                     ],
                                     spacing: { before: 200, after: 200 }
                                 })
@@ -2481,21 +2548,21 @@
                             // Other medications (Letermovir and Vemlidy)
                             ...(formData.letermovir || formData.vemlidy ? [
                                 new Paragraph({
-                                    children: [new TextRun({ text: "# Other medications:", bold: true, size: 24 })],
+                                    children: [createTextRun({ text: "# Other medications:", bold: true, size: 24 })],
                                     spacing: { before: 200, after: 100 }
                                 })
                             ] : []),
 
                             ...(formData.letermovir ? [
                                 new Paragraph({
-                                    children: [new TextRun({ text: `.Letermovir 240mg ${formData.letermovirDose}# QD since D0 (${d0Formatted}-)`, size: 24 })],
+                                    children: [createTextRun({ text: `.Letermovir 240mg ${formData.letermovirDose}# QD since D0 (${d0Formatted}-)`, size: 24 })],
                                     spacing: { after: 100 }
                                 })
                             ] : []),
 
                             ...(formData.vemlidy ? [
                                 new Paragraph({
-                                    children: [new TextRun({ text: `.Vemlidy 25mg 1# QD since D-8 (${dMinus8Formatted}-)`, size: 24 })],
+                                    children: [createTextRun({ text: `.Vemlidy 25mg 1# QD since D-8 (${dMinus8Formatted}-)`, size: 24 })],
                                     spacing: { after: 100 }
                                 })
                             ] : []),
@@ -2503,26 +2570,26 @@
                             // Anti-emesis order
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "# Anti-emesis order:", bold: true, size: 24 })
+                                    createTextRun({ text: "# Anti-emesis order:", bold: true, size: 24 })
                                 ],
                                 spacing: { before: 200, after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `1. Emend PO QD before chemotherapy: 125 mg on D-8 (${formatDateRange(formData.dMinus8, 0)}) (健保), then 80 mg on D-7 ~ D-6 (${formatDateRange(formData.dMinus8, 1)}~${formatDateRange(formData.dMinus8, 2)}) (健保), 125 mg on D-5 ~ D-3 (${formatDateRange(formData.dMinus8, 3)}~${formatDateRange(formData.dMinus8, 5)}) (自費)`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `2. Kytril 1 amp QD iv drip before chemotherapy on D-8 ~ D-3 (${formatDateRange(formData.dMinus8, 0)}~${formatDateRange(formData.dMinus8, 5)}) (健保)`, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ 
+                                children: [createTextRun({ 
                                     text: `3. Ativan 1~2 mg iv q4h prn or Vena 30 mg iv q4h prn or Primperan 10 mg ivf q6h prn or Rinderon 4 mg iv q6h prn`, 
                                     size: 24 
                                 })],
@@ -2532,14 +2599,16 @@
                             // (2) Conditioning and Acute GVHD prophylaxis order 大標題
                             new Paragraph({
                                 children: [
-                                    new TextRun({ text: "(2) Conditioning and Acute GVHD prophylaxis order", bold: true, size: 26 })
+                                    createTextRun({ text: "(2) Conditioning and Acute GVHD prophylaxis order", bold: true, size: 26 })
                                 ],
+                                alignment: AlignmentType.CENTER,
+                                shading: { fill: "D3D3D3", type: ShadingType.CLEAR },
                                 spacing: { before: 300, after: 300 }
                             }),
 
                             // 療程時間表
                             new Paragraph({
-                                children: [new TextRun({ text: "", size: 22 })],
+                                children: [createTextRun({ text: "", size: 22 })],
                                 spacing: { before: 300, after: 200 }
                             }),
                             
@@ -2560,7 +2629,7 @@
                                                 margins: { top: 100, bottom: 100, left: 120, right: 120 },
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ 
+                                                        children: [createTextRun({ 
                                                             text: `# BH: ${formData.height} cm, Actual BW: ${formData.weight} kg, Adjusted BW: ${formData.adjustedBW}kg, Adjusted BSA: ${formData.adjustedBSA}m²`, 
                                                             bold: true,
                                                             size: 20,
@@ -2583,7 +2652,7 @@
                                                 margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Day", bold: true, size: 18 })],
+                                                        children: [createTextRun({ text: "Day", bold: true, size: 18 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2598,7 +2667,7 @@
                                             margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                             children: [
                                                 new Paragraph({
-                                                    children: [new TextRun({ text: i.toString(), bold: true, size: 18 })],
+                                                    children: [createTextRun({ text: i.toString(), bold: true, size: 18 })],
                                                     alignment: AlignmentType.CENTER
                                                 })
                                             ]
@@ -2616,7 +2685,7 @@
                                                 margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "星期幾", size: 18 })],
+                                                        children: [createTextRun({ text: "星期幾", size: 18 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2634,7 +2703,7 @@
                                             margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                             children: [
                                                 new Paragraph({
-                                                    children: [new TextRun({ text: weekdays[date.getDay()], size: 18 })],
+                                                    children: [createTextRun({ text: weekdays[date.getDay()], size: 18 })],
                                                     alignment: AlignmentType.CENTER
                                                 })
                                             ]
@@ -2652,7 +2721,7 @@
                                                 margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Date", size: 18 })],
+                                                        children: [createTextRun({ text: "Date", size: 18 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2668,7 +2737,7 @@
                                             margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                             children: [
                                                 new Paragraph({
-                                                    children: [new TextRun({ text: dateStr, size: 18 })],
+                                                    children: [createTextRun({ text: dateStr, size: 18 })],
                                                     alignment: AlignmentType.CENTER
                                                 })
                                             ]
@@ -2721,7 +2790,7 @@
                                                     margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                     children: [
                                                         new Paragraph({
-                                                            children: [new TextRun({ text: med.name, size: 18 })],
+                                                            children: [createTextRun({ text: med.name, size: 18 })],
                                                             alignment: AlignmentType.LEFT
                                                         })
                                                     ]
@@ -2747,7 +2816,7 @@
                                                     margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                     children: [
                                                         new Paragraph({
-                                                            children: [new TextRun({ text: isActive ? 'V' : '', size: 18, bold: true })],
+                                                            children: [createTextRun({ text: isActive ? 'V' : '', size: 18, bold: true })],
                                                             alignment: AlignmentType.CENTER
                                                         })
                                                     ]
@@ -2764,7 +2833,7 @@
                                                 margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: isActive ? 'V' : '', bold: true, size: 18 })],
+                                                        children: [createTextRun({ text: isActive ? 'V' : '', bold: true, size: 18 })],
                                                         alignment: AlignmentType.CENTER
                                                     })
                                                 ]
@@ -2784,7 +2853,7 @@
                                                 margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                                 children: [
                                                     new Paragraph({
-                                                        children: [new TextRun({ text: "Basic IVF", size: 18 })],
+                                                        children: [createTextRun({ text: "Basic IVF", size: 18 })],
                                                         alignment: AlignmentType.LEFT
                                                     })
                                                 ]
@@ -2804,7 +2873,7 @@
                                             margins: { top: 80, bottom: 80, left: 100, right: 100 },
                                             children: [
                                                 new Paragraph({
-                                                    children: [new TextRun({ text: amount, size: 18 })],
+                                                    children: [createTextRun({ text: amount, size: 18 })],
                                                     alignment: AlignmentType.CENTER
                                                 })
                                             ]
@@ -2827,7 +2896,7 @@
                                     
                                     tbiParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# TBI (Total body irradiation), 150 cGy BID on D${formData.tbiStartDay} ~ D${formData.tbiEndDay} (${startDate}~${endDate})`, 
                                                 bold: true,
                                                 size: 24 
@@ -2835,22 +2904,22 @@
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
+                                            children: [createTextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `- Solu-medrol 40 mg iv before TBI BID on D${formData.tbiStartDay} to D${formData.tbiEndDay} (${startDate}~${endDate})`, 
                                                 size: 24 
                                             })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
+                                            children: [createTextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
+                                            children: [createTextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
                                             spacing: { after: 200 }
                                         })
                                     );
@@ -2860,7 +2929,7 @@
                                     
                                     tbiParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# TBI (Total body irradiation), 150 cGy BID on D-1 (${dMinus1Date})`, 
                                                 bold: true,
                                                 size: 24 
@@ -2868,22 +2937,22 @@
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
+                                            children: [createTextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `- Solu-medrol 40 mg iv before TBI BID on D-1 (${dMinus1Date})`, 
                                                 size: 24 
                                             })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
+                                            children: [createTextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
+                                            children: [createTextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
                                             spacing: { after: 200 }
                                         })
                                     );
@@ -2907,7 +2976,7 @@
                                 
                                 fluParagraphs.push(
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Fludarabine (30mg/m²/day) ${roundedDose} mg in normal saline 100 ml IF over 30 minutes on D${formData.fluStartDay} ~ D${formData.fluEndDay} (${fluStartDate}~${fluEndDate}) (自費)`, 
                                             bold: true,
                                             size: 24 
@@ -2944,7 +3013,7 @@
                                 
                                 buParagraphs.push(
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Busulfan (3.2 mg/kg/day) (60 mg/10cc/amp) ${roundedBuDose} mg in normal saline ${roundedNSVolume} ml IF 3 hours QD on D${formData.buStartDay} ~ D${formData.buEndDay} (${buStartDate}~${buEndDate})`, 
                                             bold: true,
                                             size: 24 
@@ -2952,7 +3021,7 @@
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Levetiracetam (Keppra) 1# PO BID on D${keppraStartDay} ~ D${keppraEndDay} (${keppraStartDate}~${keppraEndDate})`, 
                                             size: 24 
                                         })],
@@ -2984,7 +3053,7 @@
                                 
                                 cyParagraphs.push(
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Endoxan (60mg/kg/day) ${roundedCyDose} mg in normal saline 100cc IF 2.5 hours QD on D${formData.cyStartDay} ~ D${formData.cyEndDay} (${cyStartDate}~${cyEndDate})`, 
                                             bold: true,
                                             size: 24 
@@ -2992,28 +3061,28 @@
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Mesna (30 mg/kg) ${roundedMesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Mesna (30 mg/kg) ${roundedMesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Mesna (30 mg/kg) ${roundedMesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Hydration with 2.5% G/S, daily volume as above table`, 
                                             bold: true,
                                             size: 24 
@@ -3021,7 +3090,7 @@
                                         spacing: { after: 200 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Check urine analysis on D${formData.cyStartDay} ~ D${formData.cyEndDay} (${cyStartDate}~${cyEndDate}) and D0 (${d0Date})`, 
                                             bold: true,
                                             size: 24 
@@ -3049,7 +3118,7 @@
                                 
                                 atgParagraphs.push(
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# ATG (Thymoglobuline 25mg/vial) (${totalDose} mg/kg divided by 2 days) ${roundedAtgDose} mg in N/S 500 ml IF 12 hrs on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
                                             bold: true,
                                             size: 24 
@@ -3057,7 +3126,7 @@
                                         spacing: { after: 200 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Pre-medication:`, 
                                             bold: true,
                                             size: 24 
@@ -3065,28 +3134,28 @@
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Methylprednisolone 80 mg IV 30 min before ATG on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Diphenhydramine (30 mg) 1 amp IV 30 min before ATG on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Acetaminophen 1# PO 30 min before each dose of ATG on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `- Diphenhydramine 1 amp IV, Acetaminophen 1# PO, Meperidine 0.5 amp IV, Q4HPRN if chills/fever after ATG`, 
                                             size: 24 
                                         })],
@@ -3120,7 +3189,7 @@
                                 
                                 mtxParagraphs.push(
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# MTX (15 mg/m²/day) ${firstDose} mg IV push on D${d1} (${d1Date}) (the first dose should be 24 hours apart from stem cell infusion)`, 
                                             bold: true,
                                             size: 24 
@@ -3128,7 +3197,7 @@
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `then (10 mg/m²/day) ${subsequentDose} mg on D${d3} (${d3Date}), D${d6} (${d6Date}), D${d11} (${d11Date})`, 
                                             size: 24 
                                         })],
@@ -3139,7 +3208,7 @@
                                 if (formData.mtxDelay) {
                                     mtxParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `(若幹細胞輸注延至 D+1，則 MTX 皆延後一天打)`, 
                                                 size: 24,
                                                 italics: true
@@ -3150,7 +3219,7 @@
                                 } else {
                                     mtxParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ text: "", size: 24 })],
+                                            children: [createTextRun({ text: "", size: 24 })],
                                             spacing: { after: 100 }
                                         })
                                     );
@@ -3158,7 +3227,7 @@
                                 
                                 mtxParagraphs.push(
                                     new Paragraph({
-                                        children: [new TextRun({ 
+                                        children: [createTextRun({ 
                                             text: `# Leucovorin 15mg IV Q6H x 4 doses for rescue, starting 12 hours after each MTX dose`, 
                                             bold: true,
                                             size: 24 
@@ -3180,7 +3249,7 @@
                                     
                                     mmfParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Mycophenolate (Myfortic) (180 mg/cap) 2# BIDAC PO from D0 (${d0Date}), begin 4-6 hours after stem cells infusion, and start to taper after D+30, consider DC on D+61`, 
                                                 bold: true,
                                                 size: 24 
@@ -3204,7 +3273,7 @@
                                     
                                     mmfParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Myfortic (180mg/tab, 10.8mg/kg TID) ${capsules}# TID from D+5 (${d5Date}) (${weekday})`, 
                                                 bold: true,
                                                 size: 24 
@@ -3212,7 +3281,7 @@
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `PTCy, Myfortic 要從 D+5 開始`, 
                                                 size: 24,
                                                 italics: true
@@ -3238,7 +3307,7 @@
                                     
                                     ptcyParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Endoxan (14.5mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 1 hours QD on D${formData.ptcyStartDay} ~ D${formData.ptcyEndDay} (${ptcyStartDate}~${ptcyEndDate})`, 
                                                 bold: true,
                                                 size: 24 
@@ -3260,7 +3329,7 @@
                                     
                                     ptcyParagraphs.push(
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Endoxan (${dosePerKg}mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 2.5 hours QD on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcyStartDate}~${ptcyEndDate}) (start 24 hours after last Busulfan dosing)`, 
                                                 bold: true,
                                                 size: 24 
@@ -3268,7 +3337,7 @@
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
                                                 bold: true,
                                                 size: 24 
@@ -3276,7 +3345,7 @@
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
                                                 bold: true,
                                                 size: 24 
@@ -3284,7 +3353,7 @@
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
                                                 bold: true,
                                                 size: 24 
@@ -3292,7 +3361,7 @@
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# Check urine analysis on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcyStartDate}~${ptcyEndDate}) and D0 (${d0Date})`, 
                                                 bold: true,
                                                 size: 24 
@@ -3300,7 +3369,7 @@
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [new TextRun({ 
+                                            children: [createTextRun({ 
                                                 text: `# No immunosuppressive agents were administered until 24 hours after the last dose of post-transplantation Cy, including corticosteroids.`, 
                                                 bold: true,
                                                 size: 24 
@@ -3316,14 +3385,40 @@
                             // Stem cell infusion and Blood transfusion order
                             ...otherMedicationsParagraphs,
 
+                            // (5) Laboratory monitoring order
+                            new Paragraph({
+                                children: [createTextRun({ text: "(5) Laboratory monitoring order", bold: true, size: 26 })],
+                                alignment: AlignmentType.CENTER,
+                                shading: { fill: "D3D3D3", type: ShadingType.CLEAR },
+                                spacing: { before: 300, after: 200 }
+                            }),
+                            new Paragraph({
+                                children: [createTextRun({ 
+                                    text: "# Check one-touch, CBC/DC (omit D/C if WBC < 500), BCS, CsA level (C0), CMV viral load, EBV viral load, Aspergillus Ag, BK/JC virus as ward routine.", 
+                                    bold: true,
+                                    size: 24 
+                                })],
+                                spacing: { after: 200 }
+                            }),
+
                             // Other order
                             new Paragraph({
-                                children: [new TextRun({ text: `- Other order:`, size: 24 })],
+                                children: [createTextRun({ text: `- Other order:`, size: 24 })],
                                 spacing: { before: 100, after: 100 }
                             }),
                             new Paragraph({
-                                children: [new TextRun({ text: formData.otherOrder || "(手動填)", size: 24 })],
-                                spacing: { after: 200 }
+                                children: [createTextRun({ text: formData.otherOrder || "(手動填)", size: 24 })],
+                                spacing: { after: 400 }
+                            }),
+
+                            // VS 簽名（右對齊）
+                            new Paragraph({
+                                children: [createTextRun({ 
+                                    text: `VS: ${formData.vs || "___________"}`, 
+                                    size: 24 
+                                })],
+                                alignment: AlignmentType.RIGHT,
+                                spacing: { before: 200 }
                             })
                         ]
                     }]
