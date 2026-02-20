@@ -2636,7 +2636,7 @@
                                                 borders,
                                                 columnSpan: 14,
                                                 width: { size: 9360, type: WidthType.DXA },
-                                                shading: { fill: "667eea", type: ShadingType.CLEAR },
+                                                shading: { fill: "FFFFFF", type: ShadingType.CLEAR },
                                                 margins: { top: 100, bottom: 100, left: 120, right: 120 },
                                                 children: [
                                                     new Paragraph({
@@ -2644,7 +2644,7 @@
                                                             text: `# BH: ${formData.height} cm, Actual BW: ${formData.weight} kg, Adjusted BW: ${formData.adjustedBW}kg, Adjusted BSA: ${formData.adjustedBSA}m²`, 
                                                             bold: true,
                                                             size: 20,
-                                                            color: "FFFFFF"
+                                                            color: "000000"
                                                         })],
                                                         alignment: AlignmentType.LEFT
                                                     })
@@ -2935,35 +2935,35 @@
                                         })
                                     );
                                 } else {
-                                    // D-1 only
+                                    // D-1 only (single day)
                                     const dMinus1Date = formatDateRange(formData.d0, -1);
                                     
                                     tbiParagraphs.push(
                                         new Paragraph({
                                             children: [createTextRun({ 
-                                                text: `# TBI (Total body irradiation), 150 cGy BID on D-1 (${dMinus1Date})`, 
+                                                text: `# TBI (Total body irradiation), 200 cGy QD on D-1 (${dMinus1Date})`, 
                                                 bold: true,
                                                 size: 24 
                                             })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [createTextRun({ text: "- Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
+                                            children: [createTextRun({ text: "* Antiemetic prophylaxis is necessary before and after TBI", size: 24 })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
                                             children: [createTextRun({ 
-                                                text: `- Solu-medrol 40 mg iv before TBI BID on D-1 (${dMinus1Date})`, 
+                                                text: `* Solu-medrol 40 mg iv before TBI QD on D-1 (${dMinus1Date})`, 
                                                 size: 24 
                                             })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [createTextRun({ text: "- Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
+                                            children: [createTextRun({ text: "* Keep BT < 38.5 celsius degree before send patient to TBI", size: 24 })],
                                             spacing: { after: 100 }
                                         }),
                                         new Paragraph({
-                                            children: [createTextRun({ text: "- Keep Hb ≧ 11.0 gm/dl during TBI", size: 24 })],
+                                            children: [createTextRun({ text: "* Keep Hb ≧ 10.0 gm/dl during TBI", size: 24 })],
                                             spacing: { after: 200 }
                                         })
                                     );
@@ -3432,17 +3432,36 @@
                                 
                                 // PTCy RIC
                                 if (formData.ptcyRIC) {
-                                    const ptcyDose = Math.round(adjustedBW * 14.5);
+                                    // MROUND(adjustedBW * 14.5, 50) - 四捨五入到最接近的 50 的倍數
+                                    const ptcyDose = Math.round(adjustedBW * 14.5 / 50) * 50;
                                     const ptcyStartDate = formatDateRange(formData.d0, formData.ptcyStartDay);
                                     const ptcyEndDate = formatDateRange(formData.d0, formData.ptcyEndDay);
                                     
+                                    // 判斷是否為單一天
+                                    const ptcyDayRange = formData.ptcyStartDay === formData.ptcyEndDay 
+                                        ? `D${formData.ptcyStartDay} (${ptcyStartDate})`
+                                        : `D${formData.ptcyStartDay} ~ D${formData.ptcyEndDay} (${ptcyStartDate}~${ptcyEndDate})`;
+                                    
                                     ptcyParagraphs.push(
                                         new Paragraph({
-                                            children: [createTextRun({ 
-                                                text: `# Endoxan (14.5mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 1 hours QD on D${formData.ptcyStartDay} ~ D${formData.ptcyEndDay} (${ptcyStartDate}~${ptcyEndDate})`, 
-                                                bold: true,
-                                                size: 24 
-                                            })],
+                                            children: [
+                                                createTextRun({ 
+                                                    text: `# Endoxan (14.5mg/kg/day) `, 
+                                                    bold: true,
+                                                    size: 24 
+                                                }),
+                                                createTextRun({ 
+                                                    text: `${ptcyDose} mg`, 
+                                                    bold: true,
+                                                    size: 24,
+                                                    color: "FF0000"
+                                                }),
+                                                createTextRun({ 
+                                                    text: ` in normal saline 100cc IF 1 hours QD on ${ptcyDayRange}`, 
+                                                    bold: true,
+                                                    size: 24 
+                                                })
+                                            ],
                                             spacing: { after: 200 }
                                         })
                                     );
@@ -3451,44 +3470,104 @@
                                 // PTCy 40 或 50
                                 if (formData.ptcy40 || formData.ptcy50) {
                                     const dosePerKg = formData.ptcy40 ? 40 : 50;
-                                    const ptcyDose = Math.round(adjustedBW * dosePerKg);
-                                    const mesnaDose = Math.round(adjustedBW * 25);
+                                    // MROUND(adjustedBW * dosePerKg, 50)
+                                    const ptcyDose = Math.round(adjustedBW * dosePerKg / 50) * 50;
+                                    // Mesna 劑量：PTCy 40 用 20 mg/kg，PTCy 50 用 25 mg/kg
+                                    const mesnaDosePerKg = formData.ptcy40 ? 20 : 25;
+                                    const mesnaDose = Math.round(adjustedBW * mesnaDosePerKg / 50) * 50;
                                     
                                     const ptcyStartDate = formatDateRange(formData.d0, formData.ptcy50StartDay);
                                     const ptcyEndDate = formatDateRange(formData.d0, formData.ptcy50EndDay);
                                     const d0Date = formatDateRange(formData.d0, 0);
                                     
+                                    // 判斷是否為單一天
+                                    const ptcyDayRange = formData.ptcy50StartDay === formData.ptcy50EndDay 
+                                        ? `D+${formData.ptcy50StartDay} (${ptcyStartDate})`
+                                        : `D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcyStartDate}~${ptcyEndDate})`;
+                                    
                                     ptcyParagraphs.push(
                                         new Paragraph({
-                                            children: [createTextRun({ 
-                                                text: `# Endoxan (${dosePerKg}mg/kg/day) ${ptcyDose} mg in normal saline 100cc IF 2.5 hours QD on D+${formData.ptcy50StartDay} ~ D+${formData.ptcy50EndDay} (${ptcyStartDate}~${ptcyEndDate}) (start 24 hours after last Busulfan dosing)`, 
-                                                bold: true,
-                                                size: 24 
-                                            })],
+                                            children: [
+                                                createTextRun({ 
+                                                    text: `# Endoxan (${dosePerKg}mg/kg/day) `, 
+                                                    bold: true,
+                                                    size: 24 
+                                                }),
+                                                createTextRun({ 
+                                                    text: `${ptcyDose} mg`, 
+                                                    bold: true,
+                                                    size: 24,
+                                                    color: "FF0000"
+                                                }),
+                                                createTextRun({ 
+                                                    text: ` in normal saline 100cc IF 2.5 hours QD on ${ptcyDayRange} (start 24 hours after last Busulfan dosing)`, 
+                                                    bold: true,
+                                                    size: 24 
+                                                })
+                                            ],
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [createTextRun({ 
-                                                text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
-                                                bold: true,
-                                                size: 24 
-                                            })],
+                                            children: [
+                                                createTextRun({ 
+                                                    text: `# Mesna (${mesnaDosePerKg} mg/kg) `, 
+                                                    bold: true,
+                                                    size: 24 
+                                                }),
+                                                createTextRun({ 
+                                                    text: `${mesnaDose} mg`, 
+                                                    bold: true,
+                                                    size: 24,
+                                                    color: "FF0000"
+                                                }),
+                                                createTextRun({ 
+                                                    text: ` in NS 100cc IF QD 1 hr before each Endoxan`, 
+                                                    bold: true,
+                                                    size: 24 
+                                                })
+                                            ],
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [createTextRun({ 
-                                                text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
-                                                bold: true,
-                                                size: 24 
-                                            })],
+                                            children: [
+                                                createTextRun({ 
+                                                    text: `# Mesna (${mesnaDosePerKg} mg/kg) `, 
+                                                    bold: true,
+                                                    size: 24 
+                                                }),
+                                                createTextRun({ 
+                                                    text: `${mesnaDose} mg`, 
+                                                    bold: true,
+                                                    size: 24,
+                                                    color: "FF0000"
+                                                }),
+                                                createTextRun({ 
+                                                    text: ` in NS 500cc IF QD 8 hrs after each Endoxan`, 
+                                                    bold: true,
+                                                    size: 24 
+                                                })
+                                            ],
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
-                                            children: [createTextRun({ 
-                                                text: `# Mesna (25 mg/kg) ${mesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
-                                                bold: true,
-                                                size: 24 
-                                            })],
+                                            children: [
+                                                createTextRun({ 
+                                                    text: `# Mesna (${mesnaDosePerKg} mg/kg) `, 
+                                                    bold: true,
+                                                    size: 24 
+                                                }),
+                                                createTextRun({ 
+                                                    text: `${mesnaDose} mg`, 
+                                                    bold: true,
+                                                    size: 24,
+                                                    color: "FF0000"
+                                                }),
+                                                createTextRun({ 
+                                                    text: ` in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
+                                                    bold: true,
+                                                    size: 24 
+                                                })
+                                            ],
                                             spacing: { after: 200 }
                                         }),
                                         new Paragraph({
