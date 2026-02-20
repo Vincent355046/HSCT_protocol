@@ -1921,10 +1921,21 @@
                                 spacing: { before: 200, after: 100 }
                             }),
                             new Paragraph({
-                                children: [createTextRun({ 
-                                    text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) ${roundedDose} mg in normal saline 250ml IF 3 hours Q12H from ${dayLabel} (${gvhdStartDate})`, 
-                                    size: 24 
-                                })],
+                                children: [
+                                    createTextRun({ 
+                                        text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) `, 
+                                        size: 24 
+                                    }),
+                                    createTextRun({ 
+                                        text: `${roundedDose} mg`, 
+                                        size: 24,
+                                        color: "FF0000"
+                                    }),
+                                    createTextRun({ 
+                                        text: ` in normal saline 250ml IF 3 hours Q12H from ${dayLabel} (${gvhdStartDate})`, 
+                                        size: 24 
+                                    })
+                                ],
                                 spacing: { after: 100 }
                             })
                         );
@@ -2974,13 +2985,31 @@
                                 const fluStartDate = formatDateRange(formData.d0, formData.fluStartDay);
                                 const fluEndDate = formatDateRange(formData.d0, formData.fluEndDay);
                                 
+                                // 判斷是否為單一天
+                                const fluDayRange = formData.fluStartDay === formData.fluEndDay 
+                                    ? `D${formData.fluStartDay} (${fluStartDate})`
+                                    : `D${formData.fluStartDay} ~ D${formData.fluEndDay} (${fluStartDate}~${fluEndDate})`;
+                                
                                 fluParagraphs.push(
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `# Fludarabine (30mg/m²/day) ${roundedDose} mg in normal saline 100 ml IF over 30 minutes on D${formData.fluStartDay} ~ D${formData.fluEndDay} (${fluStartDate}~${fluEndDate}) (自費)`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `# Fludarabine (30mg/m²/day) `, 
+                                                bold: true,
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedDose} mg`, 
+                                                bold: true,
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in normal saline 100 ml IF over 30 minutes on ${fluDayRange} (自費)`, 
+                                                bold: true,
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 200 }
                                     })
                                 );
@@ -3011,18 +3040,51 @@
                                 const keppraStartDate = formatDateRange(formData.d0, keppraStartDay);
                                 const keppraEndDate = formatDateRange(formData.d0, keppraEndDay);
                                 
+                                // 判斷是否為單一天
+                                const buDayRange = formData.buStartDay === formData.buEndDay 
+                                    ? `D${formData.buStartDay} (${buStartDate})`
+                                    : `D${formData.buStartDay} ~ D${formData.buEndDay} (${buStartDate}~${buEndDate})`;
+                                
+                                const keppraDayRange = keppraStartDay === keppraEndDay 
+                                    ? `D${keppraStartDay} (${keppraStartDate})`
+                                    : `D${keppraStartDay} ~ D${keppraEndDay} (${keppraStartDate}~${keppraEndDate})`;
+                                
                                 buParagraphs.push(
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `# Busulfan (3.2 mg/kg/day) (60 mg/10cc/amp) ${roundedBuDose} mg in normal saline ${roundedNSVolume} ml IF 3 hours QD on D${formData.buStartDay} ~ D${formData.buEndDay} (${buStartDate}~${buEndDate})`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `# Busulfan (3.2 mg/kg/day) (60 mg/10cc/amp) `, 
+                                                bold: true,
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedBuDose} mg`, 
+                                                bold: true,
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in normal saline `, 
+                                                bold: true,
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedNSVolume} ml`, 
+                                                bold: true,
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` IF 3 hours QD on ${buDayRange}`, 
+                                                bold: true,
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
                                         children: [createTextRun({ 
-                                            text: `- Levetiracetam (Keppra) 1# PO BID on D${keppraStartDay} ~ D${keppraEndDay} (${keppraStartDate}~${keppraEndDate})`, 
+                                            text: `- Levetiracetam (Keppra) 1# PO BID on ${keppraDayRange}`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 200 }
@@ -3051,34 +3113,85 @@
                                 const cyEndDate = formatDateRange(formData.d0, formData.cyEndDay);
                                 const d0Date = formatDateRange(formData.d0, 0);
                                 
+                                // 判斷是否為單一天
+                                const cyDayRange = formData.cyStartDay === formData.cyEndDay 
+                                    ? `D${formData.cyStartDay} (${cyStartDate})`
+                                    : `D${formData.cyStartDay} ~ D${formData.cyEndDay} (${cyStartDate}~${cyEndDate})`;
+                                
                                 cyParagraphs.push(
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `# Endoxan (60mg/kg/day) ${roundedCyDose} mg in normal saline 100cc IF 2.5 hours QD on D${formData.cyStartDay} ~ D${formData.cyEndDay} (${cyStartDate}~${cyEndDate})`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `# Endoxan (60mg/kg/day) `, 
+                                                bold: true,
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedCyDose} mg`, 
+                                                bold: true,
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in normal saline 100cc IF 2.5 hours QD on ${cyDayRange}`, 
+                                                bold: true,
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `- Mesna (30 mg/kg) ${roundedMesnaDose} mg in NS 100cc IF QD 1 hr before each Endoxan`, 
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `- Mesna (30 mg/kg) `, 
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedMesnaDose} mg`, 
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in NS 100cc IF QD 1 hr before each Endoxan`, 
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `- Mesna (30 mg/kg) ${roundedMesnaDose} mg in NS 500cc IF QD 8 hrs after each Endoxan`, 
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `- Mesna (30 mg/kg) `, 
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedMesnaDose} mg`, 
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in NS 500cc IF QD 8 hrs after each Endoxan`, 
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `- Mesna (30 mg/kg) ${roundedMesnaDose} mg in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `- Mesna (30 mg/kg) `, 
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedMesnaDose} mg`, 
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in NS 500cc IF QD 14 hrs after each Endoxan and overnight 22:00 to next day 12:00`, 
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
@@ -3116,13 +3229,31 @@
                                 const atgStartDate = formatDateRange(formData.d0, formData.atgStartDay);
                                 const atgEndDate = formatDateRange(formData.d0, formData.atgEndDay);
                                 
+                                // 判斷是否為單一天
+                                const atgDayRange = formData.atgStartDay === formData.atgEndDay 
+                                    ? `D${formData.atgStartDay} (${atgStartDate})`
+                                    : `D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`;
+                                
                                 atgParagraphs.push(
                                     new Paragraph({
-                                        children: [createTextRun({ 
-                                            text: `# ATG (Thymoglobuline 25mg/vial) (${totalDose} mg/kg divided by 2 days) ${roundedAtgDose} mg in N/S 500 ml IF 12 hrs on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
-                                            bold: true,
-                                            size: 24 
-                                        })],
+                                        children: [
+                                            createTextRun({ 
+                                                text: `# ATG (Thymoglobuline 25mg/vial) (${totalDose} mg/kg divided by 2 days) `, 
+                                                bold: true,
+                                                size: 24 
+                                            }),
+                                            createTextRun({ 
+                                                text: `${roundedAtgDose} mg`, 
+                                                bold: true,
+                                                size: 24,
+                                                color: "FF0000"
+                                            }),
+                                            createTextRun({ 
+                                                text: ` in N/S 500 ml IF 12 hrs on ${atgDayRange}`, 
+                                                bold: true,
+                                                size: 24 
+                                            })
+                                        ],
                                         spacing: { after: 200 }
                                     }),
                                     new Paragraph({
@@ -3135,21 +3266,21 @@
                                     }),
                                     new Paragraph({
                                         children: [createTextRun({ 
-                                            text: `- Methylprednisolone 80 mg IV 30 min before ATG on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
+                                            text: `- Methylprednisolone 80 mg IV 30 min before ATG on ${atgDayRange}`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
                                         children: [createTextRun({ 
-                                            text: `- Diphenhydramine (30 mg) 1 amp IV 30 min before ATG on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
+                                            text: `- Diphenhydramine (30 mg) 1 amp IV 30 min before ATG on ${atgDayRange}`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
                                     }),
                                     new Paragraph({
                                         children: [createTextRun({ 
-                                            text: `- Acetaminophen 1# PO 30 min before each dose of ATG on D${formData.atgStartDay} ~ D${formData.atgEndDay} (${atgStartDate}~${atgEndDate})`, 
+                                            text: `- Acetaminophen 1# PO 30 min before each dose of ATG on ${atgDayRange}`, 
                                             size: 24 
                                         })],
                                         spacing: { after: 100 }
