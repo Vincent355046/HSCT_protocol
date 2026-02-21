@@ -320,7 +320,7 @@
 
             <div class="row">
                 <div class="form-group">
-                    <label for="dMinus8">Admission 日期 (D-8) *</label>
+                    <label for="dMinus8">Admission 日期 *</label>
                     <input type="date" id="dMinus8" name="dMinus8" required>
                 </div>
 
@@ -402,7 +402,7 @@
             </div>
 
             <!-- Conditioning 與 GVHD prophylaxis -->
-            <div class="section-title">Conditioning and Acute GVHD Prophylaxis Order</div>
+            <div class="section-title">Conditioning Order</div>
 
             <div class="form-group">
                 <label for="conditioning">Conditioning *</label>
@@ -663,6 +663,12 @@
                         <label style="display: inline-block;">
                             <input type="radio" name="gvhdType" value="cyclosporine">
                             Cyclosporine (CSA)
+                        </label>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <label style="font-weight: normal;">
+                            <input type="checkbox" id="voriconazole" name="voriconazole">
+                            併用 Voriconazole
                         </label>
                     </div>
                     <div>
@@ -1752,7 +1758,8 @@
                     plateletProduct: document.getElementById('plateletProduct').textContent,
                     gvhdProphylaxis: document.getElementById('gvhdProphylaxis').checked,
                     gvhdType: document.querySelector('input[name="gvhdType"]:checked')?.value || 'tacrolimus',
-                    gvhdStartDay: parseInt(document.querySelector('input[name="gvhdStartDay"]:checked')?.value) || -1
+                    gvhdStartDay: parseInt(document.querySelector('input[name="gvhdStartDay"]:checked')?.value) || -1,
+                    voriconazole: document.getElementById('voriconazole').checked
                 };
 
                 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, 
@@ -1786,6 +1793,12 @@
                 // 格式化完整日期字串（含年份）
                 const dMinus8FullDate = formatFullDate(formData.dMinus8, 0);
                 const d0FullDate = formatFullDate(formData.d0, 0);
+                
+                // 計算 Admission 日期與 D0 的天數差
+                const admissionDate = new Date(formData.dMinus8);
+                const d0Date = new Date(formData.d0);
+                const dayDifference = Math.round((admissionDate - d0Date) / (1000 * 60 * 60 * 24));
+                const admissionDay = dayDifference < 0 ? `D${dayDifference}` : `D+${dayDifference}`;
 
                 // 建立藥物段落列表
                 const medicationParagraphs = [];
@@ -1802,7 +1815,7 @@
                 if (formData.feburic) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [createTextRun({ text: `- Feburic 0.5# PO QD on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
+                            children: [createTextRun({ text: `- Feburic 0.5# PO QD on D-8 ~ D-2 (${formatDateRange(formData.d0, -8)}~${formatDateRange(formData.d0, -2)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1811,7 +1824,7 @@
                 if (formData.micafungin) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [createTextRun({ text: `- Micafungin 50 mg in normal saline 100 ml IF 60 minutes QD from D-8 (${dMinus8Formatted})`, size: 24 })],
+                            children: [createTextRun({ text: `- Micafungin 50 mg in normal saline 100 ml IF 60 minutes QD from D-8 (${formatDateRange(formData.d0, -8)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1820,7 +1833,7 @@
                 if (formData.baktar) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [createTextRun({ text: `- Baktar 1# QD PO on D-8 ~ D-2 (${dMinus8Formatted}~${formatDateRange(formData.dMinus8, 6)})`, size: 24 })],
+                            children: [createTextRun({ text: `- Baktar 1# QD PO on D-8 ~ D-2 (${formatDateRange(formData.d0, -8)}~${formatDateRange(formData.d0, -2)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1829,7 +1842,7 @@
                 if (formData.valtrex) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [createTextRun({ text: `- Valtrex 1# BID PO from D-8 (${dMinus8Formatted})`, size: 24 })],
+                            children: [createTextRun({ text: `- Valtrex 1# BID PO from D-8 (${formatDateRange(formData.d0, -8)})`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1874,7 +1887,7 @@
                 if (formData.alanylGlutamine) {
                     medicationParagraphs.push(
                         new Paragraph({
-                            children: [createTextRun({ text: `- Alanyl Glutamine 1BT IF 6 hours QD from D-8 (${dMinus8Formatted}) (optional, 自費)`, size: 24 })],
+                            children: [createTextRun({ text: `- Alanyl Glutamine 1BT IF 6 hours QD from D-8 (${formatDateRange(formData.d0, -8)}) (optional, 自費)`, size: 24 })],
                             spacing: { after: 100 }
                         })
                     );
@@ -1892,10 +1905,23 @@
                     
                     if (formData.gvhdType === 'tacrolimus') {
                         // 計算 Tacrolimus 劑量
-                        // 5 mg Tacrolimus in NS 500 mL → 濃度 = 0.01 mg/mL
+                        // 如果有 Voriconazole，劑量除以 3
+                        const tacrolimusDose = formData.voriconazole ? 5 / 3 : 5; // mg
+                        const tacrolimusDoseRounded = tacrolimusDose.toFixed(2); // 四捨五入到小數點後兩位
+                        
+                        // 標準計算（無 Voriconazole）：5 mg Tacrolimus in NS 500 mL → 濃度 = 0.01 mg/mL
                         const dosePerDay = (0.03 * adjustedBW).toFixed(3); // mg/day
                         const volumePerDay = (parseFloat(dosePerDay) / 0.01).toFixed(1); // mL/day
-                        const ratePerHour = Math.round(parseFloat(volumePerDay) / 24); // mL/hr (四捨五入)
+                        let ratePerHour = Math.round(parseFloat(volumePerDay) / 24); // mL/hr (四捨五入)
+                        
+                        // 如果有 Voriconazole，流速也除以 3
+                        if (formData.voriconazole) {
+                            ratePerHour = Math.round(ratePerHour / 3);
+                        }
+                        
+                        const tacrolimusText = formData.voriconazole 
+                            ? `- Tacrolimus ${tacrolimusDoseRounded} mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate}) (with Voriconazole)`
+                            : `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate})`;
                         
                         otherMedicationsParagraphs.push(
                             new Paragraph({
@@ -1904,7 +1930,7 @@
                             }),
                             new Paragraph({
                                 children: [createTextRun({ 
-                                    text: `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate})`, 
+                                    text: tacrolimusText, 
                                     size: 24 
                                 })],
                                 spacing: { after: 100 }
@@ -1915,6 +1941,12 @@
                         const rawDose = adjustedBW * 1.5;
                         const roundedDose = Math.round(rawDose / 25) * 25;
                         
+                        // 根據是否有 Voriconazole 決定頻率
+                        const frequency = formData.voriconazole ? 'QD' : 'Q12H';
+                        const csaText = formData.voriconazole 
+                            ? ` in normal saline 250ml IF 3 hours ${frequency} from ${dayLabel} (${gvhdStartDate}) (with Voriconazole)`
+                            : ` in normal saline 250ml IF 3 hours ${frequency} from ${dayLabel} (${gvhdStartDate})`;
+                        
                         otherMedicationsParagraphs.push(
                             new Paragraph({
                                 children: [createTextRun({ text: "# GVHD prophylaxis:", bold: true, size: 24 })],
@@ -1923,7 +1955,7 @@
                             new Paragraph({
                                 children: [
                                     createTextRun({ 
-                                        text: `- Cyclosporine (50mg/amp) (1.5mg/kg Q12H) `, 
+                                        text: `- Cyclosporine (50mg/amp) (1.5mg/kg ${frequency}) `, 
                                         size: 24 
                                     }),
                                     createTextRun({ 
@@ -1932,7 +1964,7 @@
                                         color: "FF0000"
                                     }),
                                     createTextRun({ 
-                                        text: ` in normal saline 250ml IF 3 hours Q12H from ${dayLabel} (${gvhdStartDate})`, 
+                                        text: csaText, 
                                         size: 24 
                                     })
                                 ],
@@ -2527,7 +2559,7 @@
 
                             new Paragraph({
                                 children: [
-                                    createTextRun({ text: `# Admission to ${formData.admissionWard} on D-8: ${dMinus8FullDate}, and D0: ${d0FullDate}`, bold: true, size: 24 })
+                                    createTextRun({ text: `# Admission to ${formData.admissionWard} on ${admissionDay}: ${dMinus8FullDate}, and D0: ${d0FullDate}`, bold: true, size: 24 })
                                 ],
                                 spacing: { after: 200 }
                             }),
@@ -2607,10 +2639,10 @@
                                 spacing: { after: 300 }
                             }),
 
-                            // (2) Conditioning and Acute GVHD prophylaxis order 大標題
+                            // (2) Conditioning Order 大標題
                             new Paragraph({
                                 children: [
-                                    createTextRun({ text: "(2) Conditioning and Acute GVHD prophylaxis order", bold: true, size: 26 })
+                                    createTextRun({ text: "(2) Conditioning Order", bold: true, size: 26 })
                                 ],
                                 alignment: AlignmentType.CENTER,
                                 shading: { fill: "D3D3D3", type: ShadingType.CLEAR },
