@@ -1905,22 +1905,20 @@
                     
                     if (formData.gvhdType === 'tacrolimus') {
                         // 計算 Tacrolimus 劑量
-                        // 如果有 Voriconazole，劑量除以 3
-                        const tacrolimusDose = formData.voriconazole ? 5 / 3 : 5; // mg
-                        const tacrolimusDoseRounded = tacrolimusDose.toFixed(2); // 四捨五入到小數點後兩位
+                        // Tacrolimus 維持 5 mg，不論是否有 Voriconazole
                         
-                        // 標準計算（無 Voriconazole）：5 mg Tacrolimus in NS 500 mL → 濃度 = 0.01 mg/mL
+                        // 標準計算：5 mg Tacrolimus in NS 500 mL → 濃度 = 0.01 mg/mL
                         const dosePerDay = (0.03 * adjustedBW).toFixed(3); // mg/day
                         const volumePerDay = (parseFloat(dosePerDay) / 0.01).toFixed(1); // mL/day
                         let ratePerHour = Math.round(parseFloat(volumePerDay) / 24); // mL/hr (四捨五入)
                         
-                        // 如果有 Voriconazole，流速也除以 3
+                        // 如果有 Voriconazole，流速除以 3
                         if (formData.voriconazole) {
                             ratePerHour = Math.round(ratePerHour / 3);
                         }
                         
                         const tacrolimusText = formData.voriconazole 
-                            ? `- Tacrolimus ${tacrolimusDoseRounded} mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate}) (with Voriconazole)`
+                            ? `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate}) (with Voriconazole)`
                             : `- Tacrolimus 5 mg in NS 500 mL cIF with rate of ${ratePerHour} mL/hr from ${dayLabel} (${gvhdStartDate})`;
                         
                         otherMedicationsParagraphs.push(
